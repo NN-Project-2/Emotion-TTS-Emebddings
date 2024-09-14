@@ -1,0 +1,19 @@
+{
+  "disgust": 0,
+ "surprised": 1, 
+ "ps": 2, 
+ "happy": 3,
+ "sleepy": 4,
+ "amused": 5, 
+ "sarcastic": 6,
+ "anger": 7, 
+ "fear": 8, 
+ "whisper": 9, 
+ "angry": 10,
+ "sad": 11, 
+ "neutral": 12,
+ "drunk": 13,
+ "surprise": 14
+ }
+
+ 

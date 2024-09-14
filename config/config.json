@@ -1,0 +1,15 @@
+{
+  "sample_rate": 16000,
+  "n_mfcc": 80,
+  "max_length": 192,
+  "batch_size": 16,
+  "learning_rate": 0.001,
+  "num_epochs": 1000,
+  "checkpoint_dir": "/content/drive/MyDrive/Emotion_Model_Training_Finetuning/Emo_Emb_Model/checkpoints",
+  "checkpoint_path": "/content/drive/MyDrive/Emotion_Model_Training_Finetuning/Emo_Emb_Model/checkpoints/model_epoch_500.pth",
+  "output_dir": "config/",
+  "data_dir": "/content/drive/MyDrive/Emotion_data_collection",
+  "processed_folder": "/content/drive/MyDrive/Emotion_Model_Training_Finetuning/Emo_Emb_Model/processed_data",
+  "emotion_ids": "/content/drive/MyDrive/Emotion_Model_Training_Finetuning/Emo_Emb_Model/config/emotion_id_map.json",
+  "language_ids": "/content/drive/MyDrive/Emotion_Model_Training_Finetuning/Emo_Emb_Model/config/language_id_map.json"
+}
