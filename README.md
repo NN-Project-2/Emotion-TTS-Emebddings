@@ -1,4 +1,4 @@
-# EMOD: An efficient approach for low resource emotional speech synthesis 🎤✨
+## EMOD: An efficient approach for low resource emotional speech synthesis 🎤✨
 
 ## Overview
 This repository contains the code and resources for developing emotional embeddings to enhance speech synthesis. Our focus is on creating embeddings that capture various emotions in multilingual contexts, improving the expressiveness of text-to-speech systems.
