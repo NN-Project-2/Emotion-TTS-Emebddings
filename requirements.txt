@@ -1,0 +1,14 @@
+numpy==1.21.6
+scipy==1.7.3
+librosa==0.8.1
+tensorflow==2.7.0
+torch==1.10.0
+matplotlib==3.5.1
+pydub==0.25.1
+soundfile==0.10.3
+scikit-learn==1.0.2
+pyAudioAnalysis==0.3.7  
+audiomentations==0.28.0  
+transformers==4.20.1 
+speechrecognition==3.8.1 
+tqdm==4.62.3  
