@@ -67,10 +67,14 @@ We evaluated our model using two primary datasets: LIMMITS and an Emotional Data
 Clone the repository and install the required packages:
 
 
-```bash
+``bash
 git clone https://github.com/yourusername/repo.git
 cd repo
 pip install -r requirements.txt
 
+## 🏁 Conclusion
+The Dis-Vector model's zero-shot capabilities enable effective voice cloning and conversion across different languages, setting a new benchmark for high-quality, customizable voice synthesis. The results of our experiments, including detailed embeddings and synthesis outputs, are available in the accompanying Git repository.
+
+For more details, please refer to the documentation in this repository! Happy experimenting! 🚀
 
 
