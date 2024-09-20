@@ -5,6 +5,9 @@ This repository contains the code and resources for developing emotional embeddi
 
 DEMO:https://nn-project-2.github.io/Emotion-TTS-web/
 
+Sample Embeddings
+A sample embedding file for emotion conversion is available. You can download it here: Emotion embeddings.tar.xz.
+
 ## 📚 Table of Contents
 - [Introduction](#introduction)
 - [Emotional Embedding Database](#emotional-embedding-database)
