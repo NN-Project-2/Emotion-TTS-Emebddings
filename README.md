@@ -58,19 +58,19 @@ We evaluated our model using two primary datasets: LIMMITS and an Emotional Data
 | Malayalam | Happy    | 79             | 83                      | 3.61 |
 | Tamil     | Angry    | 83             | 79                      | 3.75 |
 
+
+Usage
+After installation, you can use the provided scripts to generate emotional speech synthesis based on your inputs. Refer to the documentation for specific usage instructions and examples.
+
+Demo
+You can see a live demonstration of the Emotion TTS model at the following link: https://nn-project-2.github.io/Emotion-TTS-web/
 ## Installation
 Clone the repository and install the required packages:
+
 
 ```bash
 git clone https://github.com/yourusername/repo.git
 cd repo
 pip install -r requirements.txt
-
-##Usage
-After installation, you can use the provided scripts to generate emotional speech synthesis based on your inputs. Refer to the documentation for specific usage instructions and examples.
-
-##Demo
-You can see a live demonstration of the Emotion TTS model at the following link: https://nn-project-2.github.io/Emotion-TTS-web/
-
 
 
