@@ -13,10 +13,6 @@ Embeddings: A sample embedding file for emotion conversion is available. You can
 - [Integration with E2E TTS](#integration-with-e2e-tts)
 - [Zero-Shot Cloning with VITS](#zero-shot-cloning-with-vits)
 - [Experimental Results](#experimental-results)
-- [Installation](#installation)
-- [Usage](#usage)
-- [Demo](#demo)
-- [License](#license)
 
 ## Introduction
 Our model integrates emotional embeddings into the VITS TTS architecture, allowing for emotionally expressive speech synthesis. Supported emotions include:
