@@ -2,6 +2,7 @@
 
 ## Overview
 This repository contains the code and resources for developing emotional embeddings to enhance speech synthesis. Our focus is on creating embeddings that capture various emotions in multilingual contexts, improving the expressiveness of text-to-speech systems.
+DEMO:https://nn-project-2.github.io/Emotion-TTS-web/
 
 ## 📚 Table of Contents
 - [Introduction](#introduction)
