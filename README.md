@@ -66,14 +66,12 @@ We evaluated our model using two primary datasets: LIMMITS and an Emotional Data
 ## Installation
 Clone the repository and install the required packages:
 
-
-``bash
 git clone https://github.com/yourusername/repo.git
 cd repo
 pip install -r requirements.txt
 
 ## 🏁 Conclusion
-The Dis-Vector model's zero-shot capabilities enable effective voice cloning and conversion across different languages, setting a new benchmark for high-quality, customizable voice synthesis. The results of our experiments, including detailed embeddings and synthesis outputs, are available in the accompanying Git repository.
+The emotion embedding database plays a crucial role in enhancing the emotional expressiveness of synthesized speech. By incorporating a diverse collection of audio recordings spanning multiple languages and emotional states, we have developed a comprehensive dataset that supports robust emotion embedding extraction. This dataset ensures that our models can accurately capture and convey a wide range of emotions across different languages. The inclusion of zero-shot emotion conversion capabilities in our TTS system further advances the flexibility of emotional expression in synthesized speech. By utilizing these emotion embeddings, the TTS system can generate speech with new emotional tones not seen during training, broadening its applicability. The synthesized emotional speech outputs can be evaluated using a classifier model, which is trained to assess the accuracy of emotional expression, ensuring that the speech aligns with the intended emotional state. The results and detailed embeddings are provided in the accompanying Git repository. 
 
 For more details, please refer to the documentation in this repository! Happy experimenting! 🚀
 
