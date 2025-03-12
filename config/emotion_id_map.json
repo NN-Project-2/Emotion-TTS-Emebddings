@@ -1,0 +1,10 @@
+{
+  "disgust": 0,
+ "happy": 1,
+ "angry": 2,
+ "sad": 3, 
+ "neutral": 4,
+ "surprise": 5
+ }
+
+ 

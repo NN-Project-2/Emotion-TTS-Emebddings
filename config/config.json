@@ -1,0 +1,45 @@
+{
+  "sample_rate": 16000,
+  "n_mfcc": 80,
+  "max_length": 192,
+  "batch_size": 16,
+  "learning_rate": 0.001,
+  "num_epochs": 1000,
+  "checkpoint_dir": "/content/drive/MyDrive/Emotion_Model_Training_Finetuning/Emo_Emb_Model/checkpoints",
+  "checkpoint_path": "/content/drive/MyDrive/Emotion_Model_Training_Finetuning/Emo_Emb_Model/checkpoints/model_epoch_500.pth",
+  "output_dir": "config/",
+  "data_dir": "/content/drive/MyDrive/Emotion_data_collection",
+  "processed_folder": "/content/drive/MyDrive/Emotion_Model_Training_Finetuning/Emo_Emb_Model/processed_data",
+  "emotion_ids": "/content/drive/MyDrive/Emotion_Model_Training_Finetuning/Emo_Emb_Model/config/emotion_id_map.json",
+  "language_ids": "/content/drive/MyDrive/Emotion_Model_Training_Finetuning/Emo_Emb_Model/config/language_id_map.json",
+  
+  "model_config": {
+    "input_dim": 80,
+    "hidden_dim": 512,
+    "num_layers": 3,
+    "dropout": 0.3,
+    "embedding_dim": 512,
+    "cnn_channels": 64,
+    "cnn_kernel_size": 5,
+    "cnn_stride": 1,
+    "cnn_padding": 2,
+    "lstm_hidden_size": 512,
+    "lstm_num_layers": 2,
+    "output_dim": 512,
+    "use_batch_norm": true
+  },
+
+  "training_config": {
+    "optimizer": "Adam",
+    "lr_scheduler": {
+      "step_size": 100,
+      "gamma": 0.7
+    },
+    "gradient_clip": 5.0
+  },
+
+  "inference_config": {
+    "use_best_checkpoint": true,
+    "temperature": 0.7
+  }
+}

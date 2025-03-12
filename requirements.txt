@@ -1,0 +1,13 @@
+numpy
+scipy
+librosa
+tensorflow
+torch
+matplotlib
+pydub
+soundfile
+scikit-learn
+pyAudioAnalysis
+audiomentations
+transformers
+tqdm
