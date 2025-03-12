@@ -3,7 +3,11 @@
 ## Overview
 **EMOD** is a robust framework designed to enhance **expressive speech synthesis** by capturing **deep emotional embeddings** from multilingual audio data. This project aims to develop emotion embeddings that can be integrated with **end-to-end Text-to-Speech (TTS)** models like VITS, allowing natural and expressive speech synthesis even in **low-resource language settings**.
 
+<<<<<<< HEAD
+Our approach ensures that the extracted emotion embeddings effectively capture **distinct emotional characteristics** such as happiness, sadness, anger, and surprise, making synthesized speech sound more natural and human-like.
+=======
 Our approach ensures that the extracted emotion embeddings effectively capture **distinct emotional characteristics** such as happiness, sadness, anger, and disgust, making synthesized speech sound more natural and human-like.
+>>>>>>> 302b8a2 (Readme Updated)
 
 ### 🚀 **DEMO:** [Emotion-TTS Web](https://nn-project-2.github.io/Emotion-TTS-web/)
 ### 🎵 **Embeddings:** [Download Emotion embeddings.tar.xz](https://github.com/NN-Project-2/Emotion-TTS-Emebddings/blob/main/Emotion%20embeddings.tar.xz)
@@ -19,10 +23,14 @@ Our approach ensures that the extracted emotion embeddings effectively capture *
 - [Conclusion](#conclusion)
 
 
+<<<<<<< HEAD
+![EMOD Architecture](Architecture/Emod.png)
+=======
 
 <p align="center">
   <img src="Architecture/Emod.png" alt="EMOD Architecture">
 </p>
+>>>>>>> 302b8a2 (Readme Updated)
 
 
 
@@ -65,6 +73,55 @@ We designed our framework to seamlessly integrate with **end-to-end TTS models (
 This process enables the TTS model to generate speech that accurately reflects the target emotion and speaker identity.
 
 
+<<<<<<< HEAD
+## 📊 Loss Functions
+We employed multiple loss functions to ensure that the extracted embeddings are distinct, effective, and capture true emotion representations.
+
+### 1. **Emotion Classification Loss (Cross-Entropy Loss)**
+Ensures that the extracted embeddings map correctly to the true emotion label.
+
+\[ L_{ce} = -\sum y_i \log(\hat{y}_i) \]
+
+Where:
+- **y_i:** True emotion label (one-hot encoded)
+- **\hat{y}_i:** Predicted emotion probability
+
+### 2. **Embedding Similarity Loss (Cosine Similarity Loss)**
+Maximizes the similarity between embeddings representing the same emotion.
+
+\[ L_{cos} = 1 - \frac{E_a \cdot E_b}{||E_a||_2 \times ||E_b||_2} \]
+
+Where:
+- **E_a, E_b:** Emotion embeddings from different samples
+
+### 3. **Reconstruction Loss (L1 Loss)**
+Ensures that the model can reconstruct audio from embeddings without loss of information.
+
+\[ L_{rec} = \sum |x_i - \hat{x}_i| \]
+
+Where:
+- **x_i:** Ground-truth audio feature
+- **\hat{x}_i:** Reconstructed audio feature
+
+### 4. **KL Divergence Loss (KLD)**
+Regularizes the latent space to follow a standard normal distribution.
+
+\[ L_{kld} = D_{KL}(q(z|x) || p(z)) \]
+
+
+## 🔧 Orthogonality Loss for Embedding Separation
+A significant challenge in emotion synthesis is to prevent the **emotion embedding** from capturing speaker identity and vice versa. To address this, we introduced the **Orthogonality Loss** to ensure disentanglement between **speaker embedding** and **emotion embedding**.
+
+### 🔄 Orthogonality Loss Function
+\[ L_{ortho} = \frac{|E_s \cdot E_e|}{||E_s||_2 \times ||E_e||_2} \]
+
+Where:
+- **E_s:** Speaker embedding
+- **E_e:** Emotion embedding
+- **||E_s||_2, ||E_e||_2:** L2 norms
+
+This loss minimizes the cosine similarity between **speaker and emotion embeddings**, ensuring clear separation of content.
+=======
 # Emotional Speech Synthesis Model - Loss Functions
 
 Our training process employs four key loss functions to optimize the emotional speech synthesis model effectively. These losses ensure accurate reconstruction, proper emotion classification, speaker discrimination, and disentanglement of speaker and emotion embeddings.
@@ -108,6 +165,7 @@ The Orthogonality Loss is introduced to disentangle emotion and speaker embeddin
 These four loss functions collectively optimize our model to achieve high-quality emotional speech synthesis while preserving speaker identity and ensuring accurate emotion representation. The integration of these loss mechanisms enables a robust zero-shot emotional TTS system adaptable to low-resource languages and diverse speaker conditions.
 
 
+>>>>>>> 302b8a2 (Readme Updated)
 
 ### Benefits:
 - Prevents **speaker leakage** into the emotion embedding.
@@ -115,6 +173,8 @@ These four loss functions collectively optimize our model to achieve high-qualit
 - Guarantees better generalization in multi-speaker scenarios.
 
 
+<<<<<<< HEAD
+=======
 ### Clustering for Emotion Cloning and Distance-Based Similarity
 To achieve high-fidelity emotion cloning, we utilize distance-based clustering to measure the similarity between emotional embeddings. We apply hierarchical clustering and K-means clustering on extracted emotion embeddings to group similar emotional states while preserving speaker identity. The similarity between a neutral speech sample and an emotional target is computed using cosine similarity and Euclidean distance in the embedding space. This ensures that cloned emotional speech retains the target emotion while maintaining the original speaker's characteristics. Additionally, a contrastive loss function is used to enhance intra-class clustering (same emotion) and increase inter-class separation (different emotions), further refining the accuracy of emotion cloning.
 
@@ -125,6 +185,7 @@ To achieve high-fidelity emotion cloning, we utilize distance-based clustering t
 
 
 
+>>>>>>> 302b8a2 (Readme Updated)
 ## 🎧 Zero-Shot Emotion Cloning with VITS
 Our approach supports **zero-shot emotion cloning**, allowing the model to transfer emotions to a new speaker without training on their voice.
 
@@ -136,11 +197,14 @@ Our approach supports **zero-shot emotion cloning**, allowing the model to trans
 
 This zero-shot capability is crucial for **emotion conversion** across low-resource languages and speakers.
 
+<<<<<<< HEAD
+=======
 <p align="center">
   <img src="Architecture/Emod-Finetune.png" alt="EMOD Architecture" width="400">
 </p>
 
 
+>>>>>>> 302b8a2 (Readme Updated)
 
 ## 📊 Experimental Results
 We evaluated the model's performance across multiple languages using standard metrics like similarity, accuracy, and MOS (Mean Opinion Score).
