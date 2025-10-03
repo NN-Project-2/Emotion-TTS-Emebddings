@@ -21,7 +21,7 @@ Our approach ensures that the extracted emotion embeddings effectively capture *
 
 
 <p align="center">
-  <img src="Architecture/Emod-.png" alt="EMOD Architecture">
+  <img src="Architecture/1Emod.png" alt="EMOD Architecture">
 </p>
 
 
