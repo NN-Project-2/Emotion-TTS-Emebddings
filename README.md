@@ -1,4 +1,4 @@
-# EMOD: An Efficient Approach for Low-Resource Emotional Speech Synthesis 🎤✨
+# EMOD: AN EFFICIENT APPROACH FOR LOW RESOURCE CONTROLLABLE EMOTIONAL SPEECH SYNTHESIS 🎤✨
 
 ## Overview
 **EMOD** is a robust framework designed to enhance **expressive speech synthesis** by capturing **deep emotional embeddings** from multilingual audio data. This project aims to develop emotion embeddings that can be integrated with **end-to-end Text-to-Speech (TTS)** models like VITS, allowing natural and expressive speech synthesis even in **low-resource language settings**.
