@@ -15,15 +15,11 @@ Our approach ensures that the extracted emotion embeddings effectively capture *
 - [Loss Functions](#loss-functions)
 - [Orthogonality Loss for Embedding Separation](#orthogonality-loss-for-embedding-separation)
 - [Zero-Shot Emotion Cloning with VITS](#zero-shot-emotion-cloning-with-vits)
-- [Experimental Results](#experimental-results)
 - [Conclusion](#conclusion)
-
-
 
 <p align="center">
   <img src="Architecture/1Emod.png" alt="EMOD Architecture">
 </p>
-
 
 
 ## 📖 Introduction
@@ -139,18 +135,6 @@ This zero-shot capability is crucial for **emotion conversion** across low-resou
 <p align="center">
   <img src="Architecture/Emod-Finetune.png" alt="EMOD Architecture" width="400">
 </p>
-
-
-
-## 📊 Experimental Results
-We evaluated the model's performance across multiple languages using standard metrics like similarity, accuracy, and MOS (Mean Opinion Score).
-
-| Language    | Emotion   | Similarity (%) | Accuracy (%) | MOS Score |
-|-------------|-----------|----------------|---------------|-----------|
-| **English** | Angry     | 89%            | 85%           | 3.81      |
-| **Hindi**   | Sad       | 76%            | 81%           | 3.72      |
-| **Malayalam** | Happy   | 79%            | 83%           | 3.61      |
-| **Tamil**    | Angry    | 83%            | 79%           | 3.75      |
 
 
 ## 🏆 Conclusion
