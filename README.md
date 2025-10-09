@@ -9,13 +9,19 @@ Our approach ensures that the extracted emotion embeddings effectively capture *
 ### 🎵 **Embeddings:** [Download Emotion embeddings.tar.xz](https://github.com/NN-Project-2/Emotion-TTS-Emebddings/blob/main/Emotion%20embeddings.tar.xz)
 
 ## 📚 Table of Contents
-- [Introduction](#introduction)
-- [Emotional Embedding Database](#emotional-embedding-database)
-- [Integration with E2E TTS](#integration-with-e2e-tts)
-- [Loss Functions](#loss-functions)
-- [Orthogonality Loss for Embedding Separation](#orthogonality-loss-for-embedding-separation)
-- [Zero-Shot Emotion Cloning with VITS](#zero-shot-emotion-cloning-with-vits)
-- [Conclusion](#conclusion)
+- [ Introduction](#📖-introduction)
+- [ Emotional Embedding Database](#📀-emotional-embedding-database)
+- [ Integration with E2E TTS](#🔍-integration-with-e2e-tts)
+- [ How the Intensity Unsupervised Was Trained and Tuned](#⚡-how-the-intensity-unsupervised-was-trained-and-tuned)
+- [ Loss Functions](#emotional-speech-synthesis-model---loss-functions)
+  - [1. Mean Squared Error (MSE) Loss](#1-mean-squared-error-mse-loss-l_mse)
+  - [2. Generalized End-to-End (GE2E) Loss](#2-generalized-end-to-end-ge2e-loss-l_ge2e)
+  - [3. Cross-Entropy (CE) Loss](#3-cross-entropy-ce-loss-l_ce)
+  - [4. Orthogonality Loss](#4-orthogonality-loss-l_orth)
+- [Clustering for Emotion Cloning and Distance-Based Similarity](#clustering-for-emotion-cloning-and-distance-based-similarity)
+- [ Zero-Shot Emotion Cloning with VITS](#🎧-zero-shot-emotion-cloning-with-vits)
+- [ Conclusion](#🏆-conclusion)
+
 
 <p align="center">
   <img src="Architecture/1Emod.png" alt="EMOD Architecture">
