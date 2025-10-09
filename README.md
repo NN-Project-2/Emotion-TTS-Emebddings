@@ -42,8 +42,7 @@ To train our emotion embedding extractor, we curated a large-scale, multi-langua
 
 ### 📊 Key Database Highlights:
 - **Languages:** Tamil, Malayalam, Hindi, English, Kannada, Telugu
-- **Balanced Data:** ~30 minutes of audio per emotion, per language
-- **Audio Quality:** Down-sampled to **16 kHz** and converted to **Mel spectrograms**
+- **Audio Quality:** Down-sampled to **16 kHz** and converted to **Mel spectrograms** 
 - **Speaker Diversity:** Male and female speakers from various cultural and language backgrounds
 
 This diverse database enables the emotion embedding extractor to capture high-level emotional representations applicable across languages and speakers.
@@ -52,6 +51,10 @@ This diverse database enables the emotion embedding extractor to capture high-le
 ## 🔍 Integration with E2E TTS
 We designed our framework to seamlessly integrate with **end-to-end TTS models (E2E-TTS)** like VITS. The **emotion embeddings** are extracted from audio files and then passed along with text and speaker embeddings to generate expressive speech.
 
+
+## How the Intensity Unsupervised Was Trained and Tuned
+In our framework, emotional intensity was trained in an unsupervised manner by modeling deviations in prosodic cues relative to each speaker’s neutral baseline. Specifically, variations in pitch (∆F₀), energy (∆E), and duration (∆D) were extracted for every utterance and normalized to define a continuous intensity scalar α. During training, the Emotion Intensity Predictor learned to map these deviations into latent embeddings, enabling smooth control across weak to strong expressivity levels. At inference, α was directly applied to scale the emotional embedding globally, while a dimension-wise vector r adjusted fine-grained intensity per feature dimension. This design allowed natural tuning of emotional strength without requiring explicit intensity labels, supporting zero-shot transfer and controllable synthesis across multiple languages and speakers.
+
 ### ✅ Steps for Integration:
 1. **Extract Mel spectrograms** from input audio files.
 2. **Extract emotion embeddings** using our pre-trained emotion embedding extractor.
@@ -59,7 +62,6 @@ We designed our framework to seamlessly integrate with **end-to-end TTS models (
 4. **Generate expressive speech** with controlled emotional tones.
 
 This process enables the TTS model to generate speech that accurately reflects the target emotion and speaker identity.
-
 
 # Emotional Speech Synthesis Model - Loss Functions
 
@@ -72,15 +74,12 @@ The Mean Squared Error (MSE) Loss is utilized to measure reconstruction accuracy
   <img src="loss/mse.png" alt="EMOD Architecture">
 </p>
 
-
-
 ### 2. Generalized End-to-End (GE2E) Loss (L_GE2E)
 The Generalized End-to-End (GE2E) Loss is crucial for preserving speaker identity. It maximizes intra-speaker similarity while minimizing inter-speaker similarity, thereby improving speaker discrimination. By clustering embeddings from the same speaker closer together and pushing different speaker embeddings apart, GE2E loss effectively maintains speaker individuality during emotion transfer, ensuring that the synthesized speech retains the original speaker's characteristics.
 
 <p align="center">
   <img src="loss/ge2e.png" alt="EMOD Architecture">
 </p>
-
 
 ### 3. Cross-Entropy (CE) Loss (L_CE)
 The Cross-Entropy (CE) Loss is applied to both the emotion classifier and the speaker classifier.
@@ -100,9 +99,7 @@ The Orthogonality Loss is introduced to disentangle emotion and speaker embeddin
 </p>
 
 
-
 These four loss functions collectively optimize our model to achieve high-quality emotional speech synthesis while preserving speaker identity and ensuring accurate emotion representation. The integration of these loss mechanisms enables a robust zero-shot emotional TTS system adaptable to low-resource languages and diverse speaker conditions.
-
 
 
 ### Benefits:
