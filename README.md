@@ -37,15 +37,43 @@ The embeddings capture the following emotions:
 - 🤢 **Disgust**
 
 
-## 📀 Emotional Embedding Database
-To train our emotion embedding extractor, we curated a large-scale, multi-language audio database featuring diverse emotions and speaker variations. This database is essential for ensuring high-quality and robust embeddings.
+## 📀 Emotional Embedding Database  
 
-### 📊 Key Database Highlights:
-- **Languages:** Tamil, Malayalam, Hindi, English, Kannada, Telugu
-- **Audio Quality:** Down-sampled to **16 kHz** and converted to **Mel spectrograms** 
-- **Speaker Diversity:** Male and female speakers from various cultural and language backgrounds
+To train our emotion embedding extractor, we curated a large-scale, multi-language audio database featuring diverse emotions and speaker variations. This database is essential for ensuring high-quality and robust embeddings, enabling both zero-shot generalization and fine-grained control of emotional synthesis.  
 
-This diverse database enables the emotion embedding extractor to capture high-level emotional representations applicable across languages and speakers.
+### 📊 Key Database Highlights  
+
+- **Languages Covered:**  
+  Tamil, Malayalam, Hindi, English, Kannada, Telugu  
+  (with supplementary data from Assamese, Marathi, and Punjabi for cross-lingual generalization).  
+
+- **Emotion Categories:**  
+  Neutral, Angry, Sad, Happy, Fear, Surprise, and Disgust, ensuring coverage of primary and secondary emotional states.  
+
+- **Audio Quality:**  
+  All recordings are normalized, down-sampled to **16 kHz**, stored in **.wav format**, and represented as **Mel spectrograms** for consistency across datasets.  
+
+- **Speaker Diversity:**  
+  Balanced representation of **male and female speakers** across different age groups and cultural backgrounds, minimizing speaker bias.  
+
+- **Data Sources:**  
+  Combination of open-source corpora (e.g., **RAVDESS, TORONTO-Emo, EmoDB**) and **custom recordings** from dramas, stories, and conversational speech to improve naturalistic expressivity.  
+
+- **Annotation Protocols:**  
+  - Each utterance is labeled with **categorical emotion ID, speaker ID, language, and gender**.  
+  - **Intensity tags are derived in an unsupervised way**:  
+    - Deviations in **pitch (∆F₀)**, **energy (∆E)**, and **phoneme duration (∆D)** are measured against each speaker’s neutral baseline.  
+    - These deviations are normalized into a continuous scalar **α**, which is used during training and inference for controllable expressivity.  
+
+- **Size and Balance:**  
+  At least **10–20 hours per language**, with proportional distribution across emotional classes, preventing skew toward high-resource emotions or languages.  
+
+- **Metadata:**  
+  Includes **transcriptions**, **phoneme-level alignments**, and **prosodic feature statistics (F₀, energy, duration)** to support intensity estimation and embedding learning.  
+
+---
+
+This design **eliminates the need for manually labeled intensity levels** while enabling **unsupervised control of emotional strength** during synthesis.  
 
 
 ## 🔍 Integration with E2E TTS
@@ -61,6 +89,14 @@ This process enables the TTS model to generate speech that accurately reflects t
 
 
 ## How the Intensity Unsupervised Was Trained and Tuned
+
+
+
+<p align="center">
+  <img src="Architecture/emod-final-gpt (1).png" alt="GPT Architecture">
+</p>
+
+
 In our framework, emotional intensity was trained in an unsupervised manner by modeling deviations in prosodic cues relative to each speaker’s neutral baseline. Specifically, variations in pitch (∆F₀), energy (∆E), and duration (∆D) were extracted for every utterance and normalized to define a continuous intensity scalar α. During training, the Emotion Intensity Predictor learned to map these deviations into latent embeddings, enabling smooth control across weak to strong expressivity levels. At inference, α was directly applied to scale the emotional embedding globally, while a dimension-wise vector r adjusted fine-grained intensity per feature dimension. This design allowed natural tuning of emotional strength without requiring explicit intensity labels, supporting zero-shot transfer and controllable synthesis across multiple languages and speakers.
 
 ## Emotional Speech Synthesis Model - Loss Functions
