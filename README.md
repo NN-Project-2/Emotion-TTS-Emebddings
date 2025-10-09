@@ -8,44 +8,43 @@ Our approach ensures that the extracted emotion embeddings effectively capture *
 ### 🚀 **DEMO:** [Emotion-TTS Web](https://nn-project-2.github.io/Emotion-TTS-web/)
 ### 🎵 **Embeddings:** [Download Emotion embeddings.tar.xz](https://github.com/NN-Project-2/Emotion-TTS-Emebddings/blob/main/Emotion%20embeddings.tar.xz)
 
-## 📚 Table of Contents
-- [ Introduction](#📖-introduction)
-- [ Emotional Embedding Database](#📀-emotional-embedding-database)
-- [ Integration with E2E TTS](#🔍-integration-with-e2e-tts)
-- [ How the Intensity Unsupervised Was Trained and Tuned](#⚡-how-the-intensity-unsupervised-was-trained-and-tuned)
-- [ Loss Functions](#emotional-speech-synthesis-model---loss-functions)
-  - [1. Mean Squared Error (MSE) Loss](#1-mean-squared-error-mse-loss-l_mse)
-  - [2. Generalized End-to-End (GE2E) Loss](#2-generalized-end-to-end-ge2e-loss-l_ge2e)
-  - [3. Cross-Entropy (CE) Loss](#3-cross-entropy-ce-loss-l_ce)
-  - [4. Orthogonality Loss](#4-orthogonality-loss-l_orth)
-- [Clustering for Emotion Cloning and Distance-Based Similarity](#clustering-for-emotion-cloning-and-distance-based-similarity)
-- [ Zero-Shot Emotion Cloning with VITS](#🎧-zero-shot-emotion-cloning-with-vits)
-- [ Conclusion](#🏆-conclusion)
-
+## 1. Table of Contents
+1. [Introduction](#2-introduction)
+2. [Emotional Embedding Database](#3-emotional-embedding-database)
+3. [Integration with E2E TTS](#4-integration-with-e2e-tts)
+4. [How the Intensity Unsupervised Was Trained and Tuned](#5-how-the-intensity-unsupervised-was-trained-and-tuned)
+5. [Emotional Speech Synthesis Model - Loss Functions](#6-emotional-speech-synthesis-model---loss-functions)
+    1. [Mean Squared Error (MSE) Loss](#61-mean-squared-error-mse-loss-l_mse)
+    2. [Generalized End-to-End (GE2E) Loss](#62-generalized-end-to-end-ge2e-loss-l_ge2e)
+    3. [Cross-Entropy (CE) Loss](#63-cross-entropy-ce-loss-l_ce)
+    4. [Orthogonality Loss](#64-orthogonality-loss-l_orth)
+6. [Clustering for Emotion Cloning and Distance-Based Similarity](#7-clustering-for-emotion-cloning-and-distance-based-similarity)
+7. [Zero-Shot Emotion Cloning with VITS](#8-zero-shot-emotion-cloning-with-vits)
+8. [Conclusion](#9-conclusion)
 
 <p align="center">
   <img src="Architecture/1Emod.png" alt="EMOD Architecture">
 </p>
 
-## 📖 Introduction
+## 2. Introduction
 The objective of this project is to develop a highly efficient **emotional embedding extractor** that captures deep emotional features from **multilingual audio datasets** and integrates them with **TTS models**. Our model can synthesize speech that conveys distinct emotions without compromising speaker identity.
 
 The extracted emotion embeddings are language-independent and can transfer emotional tones to new speakers, even in low-resource language settings. We designed this model to handle diverse datasets, ensuring **consistent and expressive speech synthesis** across various languages and speakers.
 
-### 💪 Supported Emotions
+### Supported Emotions
 The embeddings capture the following emotions:
-- 😠 **Anger**
-- 😢 **Sadness**
-- 😐 **Neutral**
-- 😊 **Happiness**
-- 😱 **Fear**
-- 🤢 **Disgust**
+- Anger
+- Sadness
+- Neutral
+- Happiness
+- Fear
+- Disgust
 
-## 📀 Emotional Embedding Database  
+## 3. Emotional Embedding Database  
 
 To train our emotion embedding extractor, we curated a large-scale, multi-language audio database featuring diverse emotions and speaker variations. This database is essential for ensuring high-quality and robust embeddings, enabling both zero-shot generalization and fine-grained control of emotional synthesis.  
 
-### 📊 Key Database Highlights  
+### Key Database Highlights  
 
 - **Languages Covered:**  
   Tamil, Malayalam, Hindi, English, Kannada, Telugu  
@@ -79,10 +78,10 @@ To train our emotion embedding extractor, we curated a large-scale, multi-langua
 
 This design **eliminates the need for manually labeled intensity levels** while enabling **unsupervised control of emotional strength** during synthesis.  
 
-## 🔍 Integration with E2E TTS
+## 4. Integration with E2E TTS
 We designed our framework to seamlessly integrate with **end-to-end TTS models (E2E-TTS)** like VITS. The **emotion embeddings** are extracted from audio files and then passed along with text and speaker embeddings to generate expressive speech.
 
-### ✅ Steps for Integration:
+### Steps for Integration:
 1. **Extract Mel spectrograms** from input audio files.
 2. **Extract emotion embeddings** using our pre-trained emotion embedding extractor.
 3. **Feed text, speaker embeddings, and emotion embeddings** to the VITS model.
@@ -90,7 +89,7 @@ We designed our framework to seamlessly integrate with **end-to-end TTS models (
 
 This process enables the TTS model to generate speech that accurately reflects the target emotion and speaker identity.
 
-## How the Intensity Unsupervised Was Trained and Tuned
+## 5. How the Intensity Unsupervised Was Trained and Tuned
 
 <p align="center">
   <img src="Architecture/emod-final-gpt (1).png" alt="GPT Architecture" width=400>
@@ -98,24 +97,24 @@ This process enables the TTS model to generate speech that accurately reflects t
 
 In our framework, emotional intensity was trained in an unsupervised manner by modeling deviations in prosodic cues relative to each speaker’s neutral baseline. Specifically, variations in pitch (∆F₀), energy (∆E), and duration (∆D) were extracted for every utterance and normalized to define a continuous intensity scalar α. During training, the Emotion Intensity Predictor learned to map these deviations into latent embeddings, enabling smooth control across weak to strong expressivity levels. At inference, α was directly applied to scale the emotional embedding globally, while a dimension-wise vector r adjusted fine-grained intensity per feature dimension. This design allowed natural tuning of emotional strength without requiring explicit intensity labels, supporting zero-shot transfer and controllable synthesis across multiple languages and speakers.
 
-## Emotional Speech Synthesis Model - Loss Functions
+## 6. Emotional Speech Synthesis Model - Loss Functions
 Our training process employs four key loss functions to optimize the emotional speech synthesis model effectively. These losses ensure accurate reconstruction, proper emotion classification, speaker discrimination, and disentanglement of speaker and emotion embeddings.
 
-### 1. Mean Squared Error (MSE) Loss (L_MSE)
+### 6.1. Mean Squared Error (MSE) Loss (L_MSE)
 The Mean Squared Error (MSE) Loss is utilized to measure reconstruction accuracy. This loss function minimizes the difference between the original speech signal and its reconstructed version. By reducing reconstruction errors over samples, L_MSE ensures high-quality speech synthesis. The reconstructed spectrogram closely resembles the ground truth, maintaining intelligibility and expressiveness.
 
 <p align="center">
   <img src="loss/mse.png" alt="EMOD Architecture" width=200>
 </p>
 
-### 2. Generalized End-to-End (GE2E) Loss (L_GE2E)
+### 6.2. Generalized End-to-End (GE2E) Loss (L_GE2E)
 The Generalized End-to-End (GE2E) Loss is crucial for preserving speaker identity. It maximizes intra-speaker similarity while minimizing inter-speaker similarity, thereby improving speaker discrimination. By clustering embeddings from the same speaker closer together and pushing different speaker embeddings apart, GE2E loss effectively maintains speaker individuality during emotion transfer, ensuring that the synthesized speech retains the original speaker's characteristics.
 
 <p align="center">
   <img src="loss/ge2e.png" alt="EMOD Architecture" width=200>
 </p>
 
-### 3. Cross-Entropy (CE) Loss (L_CE)
+### 6.3. Cross-Entropy (CE) Loss (L_CE)
 The Cross-Entropy (CE) Loss is applied to both the emotion classifier and the speaker classifier.
 - For emotion classification, CE loss ensures that the extracted emotional features are accurately mapped to their corresponding emotion labels.
 - In the speaker classification task, CE loss enforces correct speaker identity prediction. The adversarial training setup between emotion and speaker classifiers refines the model’s ability to distinguish between these aspects while improving robustness against unwanted biases.
@@ -124,7 +123,7 @@ The Cross-Entropy (CE) Loss is applied to both the emotion classifier and the sp
   <img src="loss/CE.png" alt="EMOD Architecture" width=200>
 </p>
 
-### 4. Orthogonality Loss (L_orth)
+### 6.4. Orthogonality Loss (L_orth)
 The Orthogonality Loss is introduced to disentangle emotion and speaker embeddings effectively. This loss function enforces orthogonality between the emotion and speaker representation spaces, preventing unwanted correlations. By ensuring that the extracted features from the emotion encoder do not overlap with speaker identity features, L_orth enhances the transferability of emotional embeddings across different speakers, facilitating effective cross-lingual and cross-gender emotion transfer.
 
 <p align="center">
@@ -138,17 +137,17 @@ These four loss functions collectively optimize our model to achieve high-qualit
 - Ensures that **emotion embedding** only captures emotional content.
 - Guarantees better generalization in multi-speaker scenarios.
 
-### Clustering for Emotion Cloning and Distance-Based Similarity
+## 7. Clustering for Emotion Cloning and Distance-Based Similarity
 To achieve high-fidelity emotion cloning, we utilize distance-based clustering to measure the similarity between emotional embeddings. We apply hierarchical clustering and K-means clustering on extracted emotion embeddings to group similar emotional states while preserving speaker identity. The similarity between a neutral speech sample and an emotional target is computed using cosine similarity and Euclidean distance in the embedding space. This ensures that cloned emotional speech retains the target emotion while maintaining the original speaker's characteristics. Additionally, a contrastive loss function is used to enhance intra-class clustering (same emotion) and increase inter-class separation (different emotions), further refining the accuracy of emotion cloning.
 
 <p align="center">
-  <img src="Architecture/cluster.png" alt="EMOD Architecture" width="300">
+  <img src="Architecture/cluster.png" alt="EMOD Architecture" width=300>
 </p>
 
-## 🎧 Zero-Shot Emotion Cloning with VITS
+## 8. Zero-Shot Emotion Cloning with VITS
 Our approach supports **zero-shot emotion cloning**, allowing the model to transfer emotions to a new speaker without training on their voice.
 
-### ✅ Steps for Zero-Shot Cloning:
+### Steps for Zero-Shot Cloning:
 1. **Extract the speaker embedding** from target speaker audio.
 2. **Extract the emotion embedding** from source emotion audio.
 3. **Combine both embeddings** and pass to the VITS model.
@@ -157,12 +156,12 @@ Our approach supports **zero-shot emotion cloning**, allowing the model to trans
 This zero-shot capability is crucial for **emotion conversion** across low-resource languages and speakers.
 
 <p align="center">
-  <img src="Architecture/Emod-Finetune.png" alt="EMOD Architecture" width="400">
+  <img src="Architecture/Emod-Finetune.png" alt="EMOD Architecture" width=400>
 </p>
 
-## 🏆 Conclusion
+## 9. Conclusion
 Our work introduces an efficient approach for **emotion-aware speech synthesis** using deep emotion embeddings and orthogonal separation of speaker and emotion information. The model demonstrates superior **emotion transfer** across low-resource languages and speakers.
 
 Moving forward, we aim to enhance our model by incorporating **self-supervised learning**, expanding **cross-lingual support**, and exploring more robust emotion representations.
 
-✅ **EMOD is transforming low-resource emotional speech synthesis into reality!** 🚀
+**EMOD is transforming low-resource emotional speech synthesis into reality!**
