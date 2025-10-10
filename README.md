@@ -65,7 +65,7 @@ In the **GPT-based TTS pipeline**, input text is tokenized with a **BPE tokenize
 ## 5. Unsupervised Emotional Intensity Control
 
 <p align="center">
-  <img src="Architecture/emod-final-gpt (1).png" alt="GPT Architecture" width=400>
+  <img src="Architecture/e.png" alt="GPT Architecture" width=400>
 </p>
 
 In our framework, emotional intensity was trained in an unsupervised manner by modeling deviations in prosodic cues relative to each speaker’s neutral baseline. Specifically, variations in pitch (∆F₀), energy (∆E), and duration (∆D) were extracted for every utterance and normalized to define a continuous intensity scalar α. During training, the Emotion Intensity Predictor learned to map these deviations into latent embeddings, enabling smooth control across weak to strong expressivity levels. At inference, α was directly applied to scale the emotional embedding globally, while a dimension-wise vector r adjusted fine-grained intensity per feature dimension. This design allowed natural tuning of emotional strength without requiring explicit intensity labels, supporting zero-shot transfer and controllable synthesis across multiple languages and speakers.
