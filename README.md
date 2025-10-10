@@ -60,6 +60,11 @@ Full dataset details are available [here](https://github.com/NN-Project-1/dis-Ve
 
 The extracted **emotional embeddings** are integrated into **VITS** to condition speech synthesis while preserving speaker identity. In this architecture, the **Content Encoder** extracts speaker- and prosody-invariant linguistic features from input text, while the **Emotion Encoder** processes pitch (F₀), energy, duration, and timbre to generate emotion embeddings. These embeddings are projected into a **latent space (zemo)** with **speaker disentanglement**, allowing emotion to be applied independently. Emotional intensity is controlled via a **global scalar α**, which scales the overall embedding, and a **dimension-wise vector r**, which allows fine-grained adjustment of individual features. Latent embeddings can be interpolated across multiple emotions using weighted coefficients (λi) to create smooth transitions or composite emotional states. During training, the pre-trained Emotion Encoder is frozen, and the VITS components—including the flow-based prior, variance adaptor, and decoder—learn to reconstruct spectrograms while incorporating the emotional embeddings. Feature extraction ensures that F₀, energy, and duration are normalized relative to speaker-specific baselines, providing continuous control of intensity in a unified latent space.
 
+<p align="center">
+  <img src="Architecture/Emod-Finetune.png" alt="EMOD Architecture" width=400>
+</p>
+
+
 In the **GPT-based TTS pipeline**, input text is tokenized with a **BPE tokenizer** and embedded into subword representations, which are passed through **GPT-style Transformer blocks** trained to predict discrete latent codes from a **VQ-VAE encoder** of acoustic features. Pre-computed emotion embeddings, encoding both speaker identity and emotional state, are projected to match model dimensions and injected into the Transformer blocks via **concatenation and FiLM conditioning**. The same **α scalar** and dimension-wise ** vector** are applied to control the overall intensity and fine-grained aspects of emotion, allowing dynamic modulation of expressivity during synthesis. During training, emotion embeddings are incorporated into the model alongside content features, enabling the decoder to generate speech that reflects both the desired linguistic content and the specified emotional intensity, while maintaining speaker characteristics across multiple languages and speakers.
 
 ## 5. Unsupervised Emotional Intensity Control
@@ -117,24 +122,13 @@ To achieve high-fidelity emotion cloning, we utilize distance-based clustering t
   <img src="Architecture/cluster.png" alt="EMOD Architecture" width=300>
 </p>
 
-## 8. Zero-Shot Emotion Cloning with VITS
-Our approach supports **zero-shot emotion cloning**, allowing the model to transfer emotions to a new speaker without training on their voice.
 
-### Steps for Zero-Shot Cloning:
-1. **Extract the speaker embedding** from target speaker audio.
-2. **Extract the emotion embedding** from source emotion audio.
-3. **Combine both embeddings** and pass to the VITS model.
-4. **Generate expressive speech** that captures the target speaker’s voice and source emotion.
+## 8. Zero-Shot Emotion Transfer and Control Scenarios in TTS  
 
-This zero-shot capability is crucial for **emotion conversion** across low-resource languages and speakers.
+- ✅ Emotion TTS  
+- ✅ Cross-Lingual Transfer  
+- ✅ Cross-Gender Emotion Transfer  
+- ✅ Emotion Intensity Control  
+- ✅ Integration with End-to-End TTS  
 
-<p align="center">
-  <img src="Architecture/Emod-Finetune.png" alt="EMOD Architecture" width=400>
-</p>
 
-## 9. Conclusion
-Our work introduces an efficient approach for **emotion-aware speech synthesis** using deep emotion embeddings and orthogonal separation of speaker and emotion information. The model demonstrates superior **emotion transfer** across low-resource languages and speakers.
-
-Moving forward, we aim to enhance our model by incorporating **self-supervised learning**, expanding **cross-lingual support**, and exploring more robust emotion representations.
-
-**EMOD is transforming low-resource emotional speech synthesis into reality!**
