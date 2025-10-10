@@ -12,16 +12,15 @@ The extracted embeddings capture distinct emotions including happiness, sadness,
 ## 1. Table of Contents
 1. [Introduction](#2-introduction)
 2. [Emotional Embedding Database](#3-emotional-embedding-database)
-3. [Integration with E2E TTS](#4-integration-with-e2e-tts)
-4. [How the Intensity Unsupervised Was Trained and Tuned](#5-how-the-intensity-unsupervised-was-trained-and-tuned)
+3. [Integration with End-to-End TTS](#4-integration-with-e2e-tts)
+4. [ Unsupervised Emotional Intensity Control](#5-how-the-intensity-unsupervised-was-trained-and-tuned)
 5. [Emotional Speech Synthesis Model - Loss Functions](#6-emotional-speech-synthesis-model---loss-functions)
     1. [Mean Squared Error (MSE) Loss](#61-mean-squared-error-mse-loss-l_mse)
     2. [Generalized End-to-End (GE2E) Loss](#62-generalized-end-to-end-ge2e-loss-l_ge2e)
     3. [Cross-Entropy (CE) Loss](#63-cross-entropy-ce-loss-l_ce)
     4. [Orthogonality Loss](#64-orthogonality-loss-l_orth)
 6. [Clustering for Emotion Cloning and Distance-Based Similarity](#7-clustering-for-emotion-cloning-and-distance-based-similarity)
-7. [Zero-Shot Emotion Cloning with VITS](#8-zero-shot-emotion-cloning-with-vits)
-8. [Conclusion](#9-conclusion)
+
 
 <p align="center">
   <img src="Architecture/1Emod.png" alt="EMOD Architecture">
