@@ -1,9 +1,10 @@
 # EMOD: AN EFFICIENT APPROACH FOR LOW RESOURCE CONTROLLABLE EMOTIONAL SPEECH SYNTHESIS 🎤✨
 
 ## Overview
-**EMOD** is a robust framework designed to enhance **expressive speech synthesis** by capturing **deep emotional embeddings** from multilingual audio data. This project aims to develop emotion embeddings that can be integrated with **end-to-end Text-to-Speech (TTS)** models like VITS, allowing natural and expressive speech synthesis even in **low-resource language settings**.
+EMOD is a framework for enhancing expressive speech synthesis by capturing deep emotional embeddings from multilingual audio data. These embeddings integrate with end-to-end Text-to-Speech (TTS) models such as VITS and GPT-based speech models, enabling natural and controllable synthesis in low-resource language settings.
 
-Our approach ensures that the extracted emotion embeddings effectively capture **distinct emotional characteristics** such as happiness, sadness, anger, and disgust, making synthesized speech sound more natural and human-like.
+The extracted embeddings capture distinct emotions including happiness, sadness, anger, fear, surprise, and disgust, improving naturalness and human-likeness in generated speech. EMOD introduces fine-grained controllability, where deviations in pitch, energy, and duration are normalized into a continuous control factor. This parameter allows dynamic adjustment of emotional intensity, ranging from subtle expressivity to strong exaggeration.
+
 
 ### 🚀 **DEMO:** [Emotion-TTS Web](https://nn-project-2.github.io/Emotion-TTS-web/)
 ### 🎵 **Embeddings:** [Download Emotion embeddings.tar.xz](https://github.com/NN-Project-2/Emotion-TTS-Emebddings/blob/main/Emotion%20embeddings.tar.xz)
@@ -27,67 +28,39 @@ Our approach ensures that the extracted emotion embeddings effectively capture *
 </p>
 
 ## 2. Introduction
-The objective of this project is to develop a highly efficient **emotional embedding extractor** that captures deep emotional features from **multilingual audio datasets** and integrates them with **TTS models**. Our model can synthesize speech that conveys distinct emotions without compromising speaker identity.
+The objective of EMOD is to develop an efficient **emotional embedding extractor** capable of capturing deep emotional features from **multilingual audio datasets** and integrating them with **TTS models**. It synthesizes speech conveying distinct emotions while preserving speaker identity.
 
-The extracted emotion embeddings are language-independent and can transfer emotional tones to new speakers, even in low-resource language settings. We designed this model to handle diverse datasets, ensuring **consistent and expressive speech synthesis** across various languages and speakers.
+The embeddings are **language-independent**, allowing transfer of emotional tones to new speakers in low-resource languages. EMOD handles diverse datasets, ensuring **consistent and expressive speech synthesis** across languages and speakers.
 
 ### Supported Emotions
-The embeddings capture the following emotions:
-- Anger
-- Sadness
-- Neutral
-- Happiness
-- Fear
-- Disgust
+- Anger  
+- Sadness  
+- Neutral  
+- Happiness  
+- Fear  
+- Disgust  
+- Surprise  
 
 ## 3. Emotional Embedding Database  
 
-To train our emotion embedding extractor, we curated a large-scale, multi-language audio database featuring diverse emotions and speaker variations. This database is essential for ensuring high-quality and robust embeddings, enabling both zero-shot generalization and fine-grained control of emotional synthesis.  
+We curated a **multilingual audio database** with diverse emotions and speaker variations to train our emotion embedding extractor. This ensures **robust embeddings** capable of zero-shot generalization and fine-grained emotion control.  
 
-### Key Database Highlights  
+### Key Highlights  
 
-- **Languages Covered:**  
-  Tamil, Malayalam, Hindi, English, Kannada, Telugu  
-  (with supplementary data from Assamese, Marathi, and Punjabi for cross-lingual generalization).  
+- Languages: Tamil, Malayalam, Hindi, English, Kannada, Telugu, with extra data from Assamese, Marathi, and Punjabi.  
+- Emotions: Neutral, Angry, Sad, Happy, Fear, Surprise, Disgust.  
+- Audio: 16 kHz `.wav` format, Mel spectrograms.  
+- Speakers: Diverse male and female voices across ages.  
+- Duration: ~10–20 hours per language.  
+- Annotations: Emotion, speaker, language, intensity.  
 
-- **Emotion Categories:**  
-  Neutral, Angry, Sad, Happy, Fear, Surprise, and Disgust, ensuring coverage of primary and secondary emotional states.  
+Full dataset details are available [here](https://github.com/NN-Project-1/dis-Vector-Embedding/blob/main/README_1.md).
 
-- **Audio Quality:**  
-  All recordings are normalized, down-sampled to **16 kHz**, stored in **.wav format**, and represented as **Mel spectrograms** for consistency across datasets.  
+## 4. Integration with End-to-End TTS
 
-- **Speaker Diversity:**  
-  Balanced representation of **male and female speakers** across different age groups and cultural backgrounds, minimizing speaker bias.  
+The extracted **emotional embeddings** are integrated into **VITS** to condition speech synthesis while preserving speaker identity. In this architecture, the **Content Encoder** extracts speaker- and prosody-invariant linguistic features from input text, while the **Emotion Encoder** processes pitch (F₀), energy, duration, and timbre to generate emotion embeddings. These embeddings are projected into a **latent space (zemo)** with **speaker disentanglement**, allowing emotion to be applied independently. Emotional intensity is controlled via a **global scalar α**, which scales the overall embedding, and a **dimension-wise vector r**, which allows fine-grained adjustment of individual features. Latent embeddings can be interpolated across multiple emotions using weighted coefficients (λi) to create smooth transitions or composite emotional states. During training, the pre-trained Emotion Encoder is frozen, and the VITS components—including the flow-based prior, variance adaptor, and decoder—learn to reconstruct spectrograms while incorporating the emotional embeddings. Feature extraction ensures that F₀, energy, and duration are normalized relative to speaker-specific baselines, providing continuous control of intensity in a unified latent space.
 
-- **Data Sources:**  
-  Combination of open-source corpora (e.g., **RAVDESS, TORONTO-Emo, EmoDB**) and **custom recordings** from dramas, stories, and conversational speech to improve naturalistic expressivity.  
-
-- **Annotation Protocols:**  
-  - Each utterance is labeled with **categorical emotion ID, speaker ID, language, and gender**.  
-  - **Intensity tags are derived in an unsupervised way**:  
-    - Deviations in **pitch (∆F₀)**, **energy (∆E)**, and **phoneme duration (∆D)** are measured against each speaker’s neutral baseline.  
-    - These deviations are normalized into a continuous scalar **α**, which is used during training and inference for controllable expressivity.  
-
-- **Size and Balance:**  
-  At least **10–20 hours per language**, with proportional distribution across emotional classes, preventing skew toward high-resource emotions or languages.  
-
-- **Metadata:**  
-  Includes **transcriptions**, **phoneme-level alignments**, and **prosodic feature statistics (F₀, energy, duration)** to support intensity estimation and embedding learning.  
-
----
-
-This design **eliminates the need for manually labeled intensity levels** while enabling **unsupervised control of emotional strength** during synthesis.  
-
-## 4. Integration with E2E TTS
-We designed our framework to seamlessly integrate with **end-to-end TTS models (E2E-TTS)** like VITS. The **emotion embeddings** are extracted from audio files and then passed along with text and speaker embeddings to generate expressive speech.
-
-### Steps for Integration:
-1. **Extract Mel spectrograms** from input audio files.
-2. **Extract emotion embeddings** using our pre-trained emotion embedding extractor.
-3. **Feed text, speaker embeddings, and emotion embeddings** to the VITS model.
-4. **Generate expressive speech** with controlled emotional tones.
-
-This process enables the TTS model to generate speech that accurately reflects the target emotion and speaker identity.
+In the **GPT-based TTS pipeline**, input text is tokenized with a **BPE tokenizer** and embedded into subword representations, which are passed through **GPT-style Transformer blocks** trained to predict discrete latent codes from a **VQ-VAE encoder** of acoustic features. Pre-computed emotion embeddings, encoding both speaker identity and emotional state, are projected to match model dimensions and injected into the Transformer blocks via **concatenation and FiLM conditioning**. The same **α scalar** and dimension-wise ** vector** are applied to control the overall intensity and fine-grained aspects of emotion, allowing dynamic modulation of expressivity during synthesis. During training, emotion embeddings are incorporated into the model alongside content features, enabling the decoder to generate speech that reflects both the desired linguistic content and the specified emotional intensity, while maintaining speaker characteristics across multiple languages and speakers.
 
 ## 5. Unsupervised Emotional Intensity Control
 
