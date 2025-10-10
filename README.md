@@ -89,7 +89,7 @@ We designed our framework to seamlessly integrate with **end-to-end TTS models (
 
 This process enables the TTS model to generate speech that accurately reflects the target emotion and speaker identity.
 
-## 5. How the Intensity Unsupervised Was Trained and Tuned
+## 5. Unsupervised Emotional Intensity Control
 
 <p align="center">
   <img src="Architecture/emod-final-gpt (1).png" alt="GPT Architecture" width=400>
