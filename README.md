@@ -31,14 +31,6 @@ The objective of EMOD is to develop an efficient **emotional embedding extractor
 
 The embeddings are **language-independent**, allowing transfer of emotional tones to new speakers in low-resource languages. EMOD handles diverse datasets, ensuring **consistent and expressive speech synthesis** across languages and speakers.
 
-### Supported Emotions
-- Anger  
-- Sadness  
-- Neutral  
-- Happiness  
-- Fear  
-- Disgust  
-- Surprise  
 
 ## 3. Emotional Embedding Database  
 
