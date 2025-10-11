@@ -75,7 +75,7 @@ In the **GPT-based TTS pipeline**, input text is tokenized with a **BPE tokenize
 
 
 <p align="center">
-  <img src="Architecture/i.png" alt="EMOD Architecture" width=200>
+  <img src="Architecture/i.png" alt="EMOD Architecture" width=300>
 </p>
 
 
