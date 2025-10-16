@@ -45,7 +45,8 @@ We curated a **multilingual audio database** with diverse emotions and speaker v
 - Duration: ~10–20 hours per language.  
 - Annotations: Emotion, speaker, language, intensity.  
 
-Full dataset details are available [here]([https://github.com/NN-Project-1/dis-Vector-Embedding/blob/main/README_1.md](http://github.com/NN-Project-2/Emotion-TTS-Emebddings/tree/main?tab=readme-ov-file)).
+Full dataset details are available [here](https://github.com/NN-Project-2/Emotion-TTS-Embeddings/tree/main?tab=readme-ov-file).
+
 
 ## 4. Integration with End-to-End TTS
 
