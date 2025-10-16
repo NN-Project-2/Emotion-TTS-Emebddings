@@ -45,7 +45,7 @@ We curated a **multilingual audio database** with diverse emotions and speaker v
 - Duration: ~10–20 hours per language.  
 - Annotations: Emotion, speaker, language, intensity.  
 
-Full dataset details are available [here](https://github.com/NN-Project-1/dis-Vector-Embedding/blob/main/README_1.md).
+Full dataset details are available [here]([https://github.com/NN-Project-1/dis-Vector-Embedding/blob/main/README_1.md](http://github.com/NN-Project-2/Emotion-TTS-Emebddings/tree/main?tab=readme-ov-file)).
 
 ## 4. Integration with End-to-End TTS
 
@@ -56,7 +56,7 @@ The extracted **emotional embeddings** are integrated into **VITS** to condition
 </p>
 
 
-In the **GPT-based TTS pipeline**, input text is tokenized with a **BPE tokenizer** and embedded into subword representations, which are passed through **GPT-style Transformer blocks** trained to predict discrete latent codes from a **VQ-VAE encoder** of acoustic features. Pre-computed emotion embeddings, encoding both speaker identity and emotional state, are projected to match model dimensions and injected into the Transformer blocks via **concatenation and FiLM conditioning**. The same **α scalar** and dimension-wise ** vector** are applied to control the overall intensity and fine-grained aspects of emotion, allowing dynamic modulation of expressivity during synthesis. During training, emotion embeddings are incorporated into the model alongside content features, enabling the decoder to generate speech that reflects both the desired linguistic content and the specified emotional intensity, while maintaining speaker characteristics across multiple languages and speakers.
+In the **GPT-based TTS pipeline**, input text is tokenized with a **BPE tokenizer** and embedded into subword representations, which are passed through **GPT-style Transformer blocks** trained to predict discrete latent codes from a **VQ-VAE encoder** of acoustic features. Pre-computed emotion embeddings, encoding both speaker identity and emotional state, are projected to match model dimensions and injected into the Transformer blocks via **concatenation and FiLM conditioning**. The same **α scalar** and dimension wise ** vector** are applied to control the overall intensity and fine grained aspects of emotion, allowing dynamic modulation of expressivity during synthesis. During training, emotion embeddings are incorporated into the model alongside content features, enabling the decoder to generate speech that reflects both the desired linguistic content and the specified emotional intensity, while maintaining speaker characteristics across multiple languages and speakers.
 
 <p align="center">
   <img src="Architecture/e.png" alt="GPT Architecture" width=400>
@@ -72,7 +72,6 @@ In the **GPT-based TTS pipeline**, input text is tokenized with a **BPE tokenize
 
 
 In our framework, emotional intensity was trained in an unsupervised manner by modeling deviations in prosodic cues relative to each speaker’s neutral baseline. Specifically, variations in pitch (∆F₀), energy (∆E), and duration (∆D) were extracted for every utterance and normalized to define a continuous intensity scalar α. During training, the Emotion Intensity Predictor learned to map these deviations into latent embeddings, enabling smooth control across weak to strong expressivity levels. At inference, α was directly applied to scale the emotional embedding globally, while a dimension-wise vector r adjusted fine-grained intensity per feature dimension. This design allowed natural tuning of emotional strength without requiring explicit intensity labels, supporting zero-shot transfer and controllable synthesis across multiple languages and speakers.
-
 
 
 ## 6. Emotional Speech Synthesis Model - Loss Functions
