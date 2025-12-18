@@ -121,8 +121,41 @@ To achieve high-fidelity emotion cloning, we utilize distance-based clustering t
   <img src="Architecture/cluster.png" alt="EMOD Architecture" width=300>
 </p>
 
+## 8. Results
 
-## 8. Zero-Shot Emotion Transfer and Control Scenarios in TTS  
+### 8.1. Performance on Different Languages
+
+The following table presents results across four languages, measuring similarity (**Sim.**) to reference emotional speech, classification accuracy (**Cls. Acc.**) of predicted emotions, and Mean Opinion Score (**MOS**) for naturalness.
+
+| Language    | Emotion | Sim. (%) | Cls. Acc. (%) | MOS |
+|------------|---------|----------|---------------|-----|
+| English    | Angry   | 89       | 85            | 3.81 |
+| Hindi      | Sad     | 76       | 81            | 3.72 |
+| Malayalam  | Happy   | 79       | 83            | 3.61 |
+| Tamil      | Angry   | 83       | 79            | 3.75 |
+
+---
+
+### 8.2. Emotion Transfer Performance
+
+This table shows Mean Opinion Score (**MOS**) results for speaker cloning quality and emotion transfer quality across different target speakers and emotions.
+
+| Target Speaker        | Emotion  | MOS (Cloning) | MOS (Emotion) |
+|----------------------|----------|---------------|---------------|
+| English Female       | Angry    | 3.61          | 3.63 |
+| English Male         | Disgust  | 3.78          | 3.75 |
+| Hindi Male           | Sad      | 3.56          | 3.54 |
+| Hindi Female         | Fear     | 3.87          | 3.77 |
+| Tamil Female         | Angry    | 3.76          | 3.69 |
+| Tamil Male           | Angry    | 3.49          | 3.56 |
+| Malayalam Male       | Happy    | 3.77          | 3.68 |
+| Malayalam Female     | Happy    | 3.68          | 3.52 |
+
+
+
+
+
+## 9. Zero-Shot Emotion Transfer and Control Scenarios in TTS  
 
 - ✅ Emotion TTS  
 - ✅ Cross-Lingual Transfer  
