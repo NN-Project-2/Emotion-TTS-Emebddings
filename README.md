@@ -57,13 +57,13 @@ The extracted **emotion embeddings** are integrated into both **VITS** and **GPT
 
 Here, α is a **continuous real-valued parameter** representing the overall magnitude of emotional deviation from a speaker’s neutral baseline. Increasing α amplifies all emotion-related features encoded in the latent space, including pitch variance, energy dynamics, and spectral timbre, without changing the direction of \( z_{emo} \), which preserves the emotional type (e.g., happy, sad, angry). This design enables **continuous and monotonic control** of emotional strength, which is crucial for zero-shot, cross-lingual, and low-resource TTS scenarios where discrete intensity labels are unavailable. 
 
-To achieve **fine-grained control**, a dimension-wise modulation vector \( r \) is applied alongside α:
+To achieve **fine-grained control**, a dimension-wise modulation vector \( \mathbf{r} \) is applied alongside α:
 
 \[
-\tilde{z}_{emo} = \alpha \cdot (r \odot z_{emo})
+\tilde{z}_{emo} = \alpha \cdot (\mathbf{r} \odot z_{emo})
 \]
 
-Here, \( r \) selectively scales subspaces of the embedding corresponding to specific acoustic cues such as F₀, energy, or spectral envelope, allowing independent modulation of pitch, loudness, and timbre. This combination of α and \( r \) ensures both **global emotional intensity control** and **local, feature-specific adjustments**, giving highly flexible control over synthesized speech expressivity.
+Here, \( \mathbf{r} \) selectively scales subspaces of the embedding corresponding to specific acoustic cues such as F₀, energy, or spectral envelope, allowing independent modulation of pitch, loudness, and timbre. This combination of α and \( \mathbf{r} \) ensures both **global emotional intensity control** and **local, feature-specific adjustments**, giving highly flexible control over synthesized speech expressivity.
 
 ---
 
@@ -79,7 +79,7 @@ In the **VITS architecture**, the scaled emotion embedding \( \tilde{z}_{emo} \)
 
 ## 4.2 GPT-Based TTS Architecture
 
-In the **GPT-based TTS pipeline**, input text is tokenized using a **BPE tokenizer** and embedded into subword representations, which are processed by **GPT-style Transformer decoder blocks** trained to predict discrete acoustic tokens derived from a **VQ-VAE encoder**. The pre-computed emotion embeddings \( z_{emo} \) are projected into the Transformer hidden dimension and injected using **concatenation and FiLM-based conditioning**. The scaled embedding \( \tilde{z}_{emo} = \alpha \cdot (r \odot z_{emo}) \) is applied uniformly across all Transformer layers, enabling continuous modulation of expressivity during autoregressive token generation while preserving temporal coherence and speaker identity. α controls the **global emotional magnitude**, while r fine-tunes individual feature dimensions, allowing independent adjustment of pitch, energy, or timbre dynamics. Evaluation follows a similar methodology as in VITS: objective metrics track changes in prosodic statistics and speaker similarity, and subjective MOS tests quantify perceived emotional intensity and naturalness. Results confirm that α functions as a **stable, interpretable, and monotonic control parameter**, providing continuous, zero-shot, and cross-lingual controllable emotion synthesis in GPT-based TTS systems.
+In the **GPT-based TTS pipeline**, input text is tokenized using a **BPE tokenizer** and embedded into subword representations, which are processed by **GPT-style Transformer decoder blocks** trained to predict discrete acoustic tokens derived from a **VQ-VAE encoder**. The pre-computed emotion embeddings \( z_{emo} \) are projected into the Transformer hidden dimension and injected using **concatenation and FiLM-based conditioning**. The scaled embedding \( \tilde{z}_{emo} = \alpha \cdot (\mathbf{r} \odot z_{emo}) \) is applied uniformly across all Transformer layers, enabling continuous modulation of expressivity during autoregressive token generation while preserving temporal coherence and speaker identity. α controls the **global emotional magnitude**, while \( \mathbf{r} \) fine-tunes individual feature dimensions, allowing independent adjustment of pitch, energy, or timbre dynamics. Evaluation follows a similar methodology as in VITS: objective metrics track changes in prosodic statistics and speaker similarity, and subjective MOS tests quantify perceived emotional intensity and naturalness. Results confirm that α functions as a **stable, interpretable, and monotonic control parameter**, providing continuous, zero-shot, and cross-lingual controllable emotion synthesis in GPT-based TTS systems.
 
 <p align="center">
   <img src="Architecture/e.png" alt="GPT Architecture" width=400>
