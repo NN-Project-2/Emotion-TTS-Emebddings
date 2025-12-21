@@ -49,41 +49,41 @@ Full dataset details are available [here](https://github.com/NN-Project-2/Emotio
 
 ## 4. Integration with End-to-End TTS
 
-The extracted **emotion embeddings** are integrated into both **VITS** and **GPT-based TTS** architectures to enable controllable emotional speech synthesis while preserving linguistic content and speaker identity. The **Emotion Encoder** processes acoustic attributes including fundamental frequency (F₀), energy, duration, and timbre to generate a continuous emotion embedding \( z_{emo} \). This embedding is explicitly disentangled from content and speaker representations and projected into a shared latent space compatible with downstream TTS models.
-
-Emotional intensity is controlled using a **global scalar α**, applied as a multiplicative scaling factor over the emotion embedding:
+The extracted **emotion embeddings** are integrated into both **VITS** and **GPT-based TTS** architectures to enable controllable emotional speech synthesis while preserving linguistic content and speaker identity. The **Emotion Encoder** processes acoustic attributes including fundamental frequency (F₀), energy, duration, and timbre to generate a continuous emotion embedding \( z_{emo} \). This embedding is explicitly disentangled from content and speaker representations and projected into a shared latent space compatible with downstream TTS models. Emotional intensity is controlled using a **global scalar α**, which acts as a multiplicative factor over the embedding vector: 
 
 \[
 \tilde{z}_{emo} = \alpha \cdot z_{emo}
 \]
 
-The α parameter modulates the **magnitude of emotional deviation** encoded in the latent space without altering the direction of the embedding vector. This design ensures that increasing α amplifies emotional expressivity (e.g., pitch variance, energy dynamics, spectral emphasis) while maintaining consistency in linguistic articulation and speaker characteristics. Unlike categorical emotion conditioning, α enables **continuous and monotonic control** over emotional strength, which is critical for zero-shot and cross-lingual synthesis where explicit emotion intensity labels are unavailable.
+Here, α is a **continuous real-valued parameter** representing the overall magnitude of emotional deviation from a speaker’s neutral baseline. Increasing α amplifies all emotion-related features encoded in the latent space, including pitch variance, energy dynamics, and spectral timbre, without changing the direction of \( z_{emo} \), which preserves the emotional type (e.g., happy, sad, angry). This design enables **continuous and monotonic control** of emotional strength, which is crucial for zero-shot, cross-lingual, and low-resource TTS scenarios where discrete intensity labels are unavailable. 
 
-To enable finer control beyond global scaling, a **dimension-wise modulation vector r** is applied:
+To achieve **fine-grained control**, a dimension-wise modulation vector \( r \) is applied alongside α:
 
 \[
 \tilde{z}_{emo} = \alpha \cdot (r \odot z_{emo})
 \]
 
-where \( r \) selectively adjusts subspaces of the embedding corresponding to pitch-related, energy-related, or timbre-related emotional cues.
+Here, \( r \) selectively scales subspaces of the embedding corresponding to specific acoustic cues such as F₀, energy, or spectral envelope, allowing independent modulation of pitch, loudness, and timbre. This combination of α and \( r \) ensures both **global emotional intensity control** and **local, feature-specific adjustments**, giving highly flexible control over synthesized speech expressivity.
 
-In **VITS**, the scaled emotion embedding \( \tilde{z}_{emo} \) conditions the flow-based prior and decoder while remaining disentangled from the **Content Encoder**, which extracts speaker- and prosody-invariant linguistic features. The **variance adaptor** incorporates normalized F₀, energy, and duration features relative to speaker-specific baselines, ensuring that α directly controls deviations from neutral prosody rather than absolute acoustic values. During training, the Emotion Encoder is frozen, and VITS components learn to reconstruct mel-spectrograms conditioned on \( \tilde{z}_{emo} \), enforcing stable emotion control within a unified latent space.
+---
 
+## 4.1 VITS Architecture
+
+In the **VITS architecture**, the scaled emotion embedding \( \tilde{z}_{emo} \) conditions the flow-based prior and decoder while remaining disentangled from the **Content Encoder**, which extracts speaker- and prosody-invariant linguistic features. The **variance adaptor** normalizes F₀, energy, and duration relative to speaker-specific baselines, so that α directly modulates **deviations from neutral prosody** rather than absolute acoustic values. During training, the Emotion Encoder is frozen, and VITS components learn to reconstruct mel-spectrograms conditioned on \( \tilde{z}_{emo} \), enabling precise and stable emotion control. The effect of α is validated by running **controlled inference experiments**, where α is varied while keeping content, speaker embedding, and random seed fixed. Objective evaluation measures monotonic changes in F₀ variance, energy range, and duration spread, confirming that α consistently amplifies expressivity without distorting content or speaker identity. Subjective evaluation is conducted using **Mean Opinion Score (MOS)** tests, where listeners rate emotional intensity and naturalness across different α values. Results show a perceptually linear and stable increase in emotional strength as α increases, with no artifacts or speaker leakage, confirming that α provides a **reliable and interpretable control parameter** for VITS-based TTS.
 
 <p align="center">
-  <img src="Architecture/2o.png" alt="EMOD Architecture" width=400>
+  <img src="Architecture/2o.png" alt="VITS Architecture" width=400>
 </p>
 
-In the **GPT-based TTS pipeline**, input text is tokenized using a **BPE tokenizer** and embedded into subword representations, which are processed by **GPT-style Transformer decoder blocks** trained to predict discrete acoustic tokens derived from a **VQ-VAE encoder**. Emotion embeddings are projected to the Transformer hidden dimension and injected through **concatenation and FiLM-based conditioning**. The same α-scaled embedding \( \tilde{z}_{emo} \) is applied uniformly across Transformer layers, enabling dynamic modulation of expressivity during autoregressive token generation while preserving temporal coherence.
+---
 
+## 4.2 GPT-Based TTS Architecture
+
+In the **GPT-based TTS pipeline**, input text is tokenized using a **BPE tokenizer** and embedded into subword representations, which are processed by **GPT-style Transformer decoder blocks** trained to predict discrete acoustic tokens derived from a **VQ-VAE encoder**. The pre-computed emotion embeddings \( z_{emo} \) are projected into the Transformer hidden dimension and injected using **concatenation and FiLM-based conditioning**. The scaled embedding \( \tilde{z}_{emo} = \alpha \cdot (r \odot z_{emo}) \) is applied uniformly across all Transformer layers, enabling continuous modulation of expressivity during autoregressive token generation while preserving temporal coherence and speaker identity. α controls the **global emotional magnitude**, while r fine-tunes individual feature dimensions, allowing independent adjustment of pitch, energy, or timbre dynamics. Evaluation follows a similar methodology as in VITS: objective metrics track changes in prosodic statistics and speaker similarity, and subjective MOS tests quantify perceived emotional intensity and naturalness. Results confirm that α functions as a **stable, interpretable, and monotonic control parameter**, providing continuous, zero-shot, and cross-lingual controllable emotion synthesis in GPT-based TTS systems.
 
 <p align="center">
   <img src="Architecture/e.png" alt="GPT Architecture" width=400>
 </p>
-
-The effectiveness of α is evaluated through controlled inference-time experiments by varying α while keeping content, speaker embedding, and random seed fixed. This isolates the contribution of α to emotional expressivity. Objective validation is performed by measuring monotonic changes in prosodic statistics, including F₀ variance, energy range, and duration spread, as α increases. Stability is confirmed by observing minimal drift in content-related representations and speaker similarity metrics across α values.
-
-Subjective evaluation is conducted using **Mean Opinion Score (MOS)** tests, where listeners rate emotional strength and naturalness across multiple α settings. Results demonstrate a consistent and perceptually linear relationship between α and perceived emotional intensity, with no abrupt artifacts or speaker identity leakage. These findings confirm that α functions as a reliable and interpretable control parameter for continuous emotion tuning in both VITS and GPT-based TTS systems under zero-shot and cross-lingual conditions.
 
 
 ## 5. Unsupervised Emotional Intensity Control
