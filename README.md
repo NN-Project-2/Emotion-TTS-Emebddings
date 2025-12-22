@@ -42,8 +42,6 @@ The parameter α is computed from low-level prosodic deviations relative to spea
 
 α = σ(β₁ΔF₀ + β₂ΔE + β₃ΔD)
 
-
-
 where σ denotes the sigmoid function and βᵢ are trainable coefficients that adaptively weight the relative contribution of each prosodic cue. This formulation allows the model to emphasize the most informative dimensions while maintaining numerical stability and cross-speaker consistency.
 
 During inference, α operates as a global scaling factor applied directly to the emotion embedding:
@@ -55,15 +53,15 @@ This multiplicative interaction enables smooth interpolation between neutral and
 
 ## 3. Integration with End-to-End TTS
 
-The extracted emotion embeddings are integrated into both **VITS** and **GPT-based TTS** architectures to enable controllable emotional synthesis while preserving linguistic content and speaker identity. The Emotion Encoder generates a continuous emotion representation \( z_{\text{emo}} \) from prosodic and spectral cues, which is explicitly disentangled from content and speaker representations and projected into a latent space compatible with downstream synthesis models. Emotional strength is regulated using the global scalar \( \alpha \), which modulates the magnitude of emotional deviation without altering emotional type:
+The extracted emotion embeddings are integrated into both **VITS** and **GPT-based TTS** architectures to enable controllable emotional synthesis while preserving linguistic content and speaker identity. The Emotion Encoder generates a continuous emotion representation $z_{emo}$ from prosodic and spectral cues, which is explicitly disentangled from content and speaker representations and projected into a latent space compatible with downstream synthesis models. Emotional strength is regulated using the global scalar $\alpha$, which modulates the magnitude of emotional deviation without altering emotional type:
 
 \[
-\tilde{z}_{\text{emo}} = \alpha \cdot z_{\text{emo}}
+$\tilde{z}\_{emo} = \alpha \cdot (\mathbf{r} \odot z\_{emo})$
 \]
 
-Increasing \( \alpha \) amplifies emotion-related attributes such as pitch variance, energy dynamics, and spectral coloration, while the direction of \( z_{\text{emo}} \) preserves categorical emotion identity. This design enables monotonic and continuous intensity control, which is particularly important in zero-shot and cross-lingual settings where explicit intensity annotations are unavailable.
+Increasing $\alpha$ amplifies emotion-related attributes such as pitch variance, energy dynamics, and spectral coloration, while the direction of $z_{emo}$ preserves categorical emotion identity. This design enables monotonic and continuous intensity control, which is particularly important in zero-shot and cross-lingual settings where explicit intensity annotations are unavailable.
 
-To enable finer control, a dimension-wise modulation vector \( r \) is applied alongside \( \alpha \):
+To enable finer control, a dimension-wise modulation vector \( r \) is applied alongside $\alpha$:
 
 \[
 \tilde{z}_{\text{emo}} = \alpha \cdot ( r \odot z_{\text{emo}} )
