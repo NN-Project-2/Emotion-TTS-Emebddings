@@ -50,15 +50,15 @@ Training follows a three-stage pipeline designed to balance cross-lingual genera
 Although categorical emotion embeddings encode emotional type, they do not capture how strongly an emotion is expressed. In natural speech, emotional expression varies continuously, even within the same category, depending on context, speaker intent, and prosodic realization. EMOD explicitly models this variation using a continuous global intensity parameter α ∈ [0.0, 1.0], which separates emotional magnitude from emotional identity. This separation enables controlled adjustment of expressivity without altering the semantic direction of the emotion embedding.
 
 The parameter α is computed from low-level prosodic deviations relative to speaker-specific neutral baselines, ensuring invariance to individual speaking styles. For each utterance, deviations in pitch (ΔF₀), energy (ΔE), and duration (ΔD) are measured against neutral reference statistics for the same speaker. These deviations reflect how far an utterance departs from neutral prosody along dimensions known to correlate with perceived emotional intensity. The deviations are linearly combined using learnable weights and normalized through a sigmoid function to produce a bounded intensity value:
-
+<p align="center">
 α = σ(β₁ΔF₀ + β₂ΔE + β₃ΔD)
-
+</p>
 where σ denotes the sigmoid function and βᵢ are trainable coefficients that adaptively weight the relative contribution of each prosodic cue. This formulation allows the model to emphasize the most informative dimensions while maintaining numerical stability and cross-speaker consistency.
 
 During inference, α operates as a global scaling factor applied directly to the emotion embedding:
-
+<p align="center">
 z̃_emo = α · z_emo
-
+</p>
 This multiplicative interaction enables smooth interpolation between neutral and expressive speech while preserving the direction of the emotion vector in latent space. Because α is independent of emotion classification, it can be adjusted dynamically at synthesis time without re-encoding emotional category labels. The formulation remains compatible with dimension-wise modulation vectors r ∈ ℝ²⁵⁶, enabling joint control over global intensity and localized acoustic attributes.
 
 
