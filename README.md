@@ -12,24 +12,30 @@ The extracted embeddings capture distinct emotions including happiness, sadness,
 ## 1. Table of Contents
 1. [Overview](#overview)
 2. [Introduction](#2-introduction)
-    - [2.1 Intensity Control Parameter α](#21-intensity-control-parameter-α)
-3. [Integration with End-to-End TTS](#3-integration-with-end-to-end-tts)
+    - [2.1 EMOD-Architecture] 
+    - [2.2 Intensity Control Parameter α](#21-intensity-control-parameter-α)
+    - [2.3 Emotional Speech Synthesis Model – Loss Functions]
+4. [Integration with End-to-End TTS](#3-integration-with-end-to-end-tts)
     - [3.1 VITS Architecture](#31-vits-architecture)
     - [3.2 GPT-Based TTS Architecture](#32-gpt-based-tts-architecture)
-4. [Unsupervised Emotional Intensity Control](#4-unsupervised-emotional-intensity-control)
-5. [Emotional Speech Synthesis Model – Loss Functions](#5-emotional-speech-synthesis-model--loss-functions)
+5. [Unsupervised Emotional Intensity Control](#4-unsupervised-emotional-intensity-control)
+6. [Emotional Speech Synthesis Model – Loss Functions](#5-emotional-speech-synthesis-model--loss-functions)
     - [Mean Squared Error (MSE) Loss](#mean-squared-error-mse-loss-l_mse)
     - [Generalized End-to-End (GE2E) Loss](#generalized-end-to-end-ge2e-loss-l_ge2e)
     - [Cross-Entropy (CE) Loss](#cross-entropy-ce-loss-l_ce)
     - [Orthogonality Loss](#orthogonality-loss-l_orth)
-6. [Clustering for Emotion Cloning and Distance-Based Similarity](#6-clustering-for-emotion-cloning-and-distance-based-similarity)
-7. [Test Setup and Results](#7-test-setup-and-results)
+7. [Clustering for Emotion Cloning and Distance-Based Similarity](#6-clustering-for-emotion-cloning-and-distance-based-similarity)
+8. [Test Setup and Results](#7-test-setup-and-results)
     - [7.1 Test Setup](#71-test-setup)
     - [7.2 Results Across Languages](#72-results-across-languages)
     - [7.3 Emotion Transfer and Speaker Cloning Results](#73-emotion-transfer-and-speaker-cloning-results)
-8. [Emotional Embedding Database](#8-emotional-embedding-database)
-9. [Zero-Shot Emotion Transfer and Control Scenarios in TTS](#9-zero-shot-emotion-transfer-and-control-scenarios-in-tts)
+9. [Emotional Embedding Database](#8-emotional-embedding-database)
+10. [Zero-Shot Emotion Transfer and Control Scenarios in TTS](#9-zero-shot-emotion-transfer-and-control-scenarios-in-tts)
 
+
+## 2. Introduction
+
+EMOD is proposed to address the lack of controllable and transferable emotional representations in multilingual text-to-speech systems. Existing TTS models often entangle emotion with speaker identity and language-specific prosody, limiting zero-shot emotion transfer. EMOD explicitly learns language-independent emotional embeddings that can be reused across speakers, languages, and synthesis architectures. By separating emotional identity from intensity and speaker characteristics, EMOD enables fine-grained, continuous emotional control in low-resource and zero-shot settings. The extracted embeddings are directly compatible with both VITS and GPT-based TTS models without retraining the emotion encoder.
 
 
 
@@ -37,29 +43,120 @@ The extracted embeddings capture distinct emotions including happiness, sadness,
   <img src="Architecture/1Emod.png" alt="EMOD Architecture">
 </p>
 
-## 2. Introduction
 
-EMOD is designed as a multilingual emotional embedding extractor that enables controllable emotional speech synthesis within both VITS and GPT-based text-to-speech (TTS) architectures. The system models six categorical emotions  happiness, sadness, anger, fear, surprise, and disgust using language-independent 256-dimensional emotion embeddings trained with L2 normalization and contrastive objectives. These embeddings are constructed to remain stable across languages while preserving perceptually salient emotional characteristics, allowing direct reuse in zero-shot and low-resource synthesis settings.
 
-The architecture consists of three tightly coupled components. A transformer-based encoder processes prosodic and spectral cues derived from 80-band mel-spectrograms, including fundamental frequency (F₀), energy contours, and temporal structure, to form a compact emotional representation. An intensity control module models continuous variations in emotional strength directly from prosodic deviations rather than discrete labels. Finally, a TTS integration layer adapts the learned emotion embeddings for both VITS and GPT-based backends through feature-wise linear modulation (FiLM), ensuring compatibility with structurally different synthesis models without retraining the emotion encoder.
+## 2.1 EMOD-Architecture
 
-Training follows a three-stage pipeline designed to balance cross-lingual generalization and representation disentanglement. Multilingual pre-training is first performed using speech from Tamil, Malayalam, Hindi, English, Kannada, and Telugu, supplemented with Assamese, Marathi, and Punjabi, enabling the model to learn language-agnostic emotional cues. This is followed by a disentanglement phase that enforces orthogonality between emotion and speaker representations while employing adversarial speaker classification to suppress speaker leakage. The final stage fine-tunes the embeddings within TTS-specific objectives to ensure stable conditioning during synthesis. All models are trained for 500,000 steps using AdamW with a learning rate of 3×10⁻⁴, batch size 32, gradient accumulation of two steps, and mixed-precision training on four NVIDIA L4 GPUs (24 GB VRAM each). The training data comprises approximately 10–20 hours of speech per language at 16 kHz.
+EMOD generates emotional embeddings by explicitly disentangling emotional attributes from speaker identity and linguistic content, enabling **controllable emotion transfer without altering speaker timbre**. Emotional expressivity is modeled through a unified representation that integrates **prosodic, spectral, and phonetic descriptors**. Fundamental frequency ($F_0$), extracted using **PyWorld** and interpolated across unvoiced regions, captures pitch dynamics associated with emotional arousal, while **normalized short-term energy** reflects variations in vocal effort. **Phoneme-level duration** encodes temporal expressivity, capturing rhythm and speaking-rate changes correlated with emotional state. Spectral and linguistic content is represented using **80-dimensional mel-spectrograms** and **HuBERT embeddings**, where HuBERT provides phonetic abstraction while minimizing speaker and prosody bias.
 
-### 2.1 Intensity Control Parameter α
+These acoustic and linguistic cues are consolidated into a compact **192-dimensional feature representation** composed of mel coefficients, $F_0$, energy, and reduced HuBERT embeddings, ensuring robustness across speakers and languages. The fused features are processed by the **Emotion Encoder**, which combines **convolutional layers** for local temporal modeling, **bidirectional LSTMs** for sequence-level dependency capture, and **attention mechanisms** for dynamic weighting of emotionally salient regions. The encoder projects the input into a **256-dimensional latent emotion embedding** $z_{emo}$, which encodes categorical emotional identity independent of speaker characteristics.
 
-Although categorical emotion embeddings encode emotional type, they do not capture how strongly an emotion is expressed. In natural speech, emotional expression varies continuously, even within the same category, depending on context, speaker intent, and prosodic realization. EMOD explicitly models this variation using a continuous global intensity parameter α ∈ [0.0, 1.0], which separates emotional magnitude from emotional identity. This separation enables controlled adjustment of expressivity without altering the semantic direction of the emotion embedding.
+In parallel, a **Speaker Encoder** extracts a **256-dimensional speaker embedding** $z_{spk}$ from reference speech, capturing speaker-specific timbre and vocal-tract characteristics while remaining invariant to emotional content. The emotion and speaker embeddings are then fused through concatenation to form a **512-dimensional joint latent representation**:
 
-The parameter α is computed from low-level prosodic deviations relative to speaker-specific neutral baselines, ensuring invariance to individual speaking styles. For each utterance, deviations in pitch (ΔF₀), energy (ΔE), and duration (ΔD) are measured against neutral reference statistics for the same speaker. These deviations reflect how far an utterance departs from neutral prosody along dimensions known to correlate with perceived emotional intensity. The deviations are linearly combined using learnable weights and normalized through a sigmoid function to produce a bounded intensity value:
+$$
+z_{joint} = [\, z_{spk} \; \Vert \; z_{emo} \,]
+$$
+
+This fused representation provides the decoder with explicit access to both speaker identity and emotional attributes without requiring implicit disentanglement.
+
+To generate acoustic outputs, EMOD employs a **cross-attention–based decoder** that conditions on the joint latent representation. Cross-attention allows the decoder to dynamically attend to emotion and speaker subspaces at each decoding step, enabling precise alignment between linguistic content, speaker timbre, and emotional prosody. This mechanism ensures that emotional modulation influences pitch, energy, and spectral coloration without corrupting phonetic structure or speaker identity.
+
+Continuous emotional control is introduced at the latent level through an **intensity-controlled emotion embedding**. The global intensity parameter $\alpha$ modulates the emotion embedding before fusion:
+
+$$
+\tilde{z}_{emo} = \alpha \cdot (z_{emo} \odot r)
+$$
+
+where $r \in \mathbb{R}^{256}$ is a **dimension-wise modulation vector** that enables fine-grained control over specific emotional attributes. The scaled emotion embedding $\tilde{z}_{emo}$ replaces $z_{emo}$ in the fusion process, allowing emotion strength to be adjusted continuously while preserving categorical identity. This design enables EMOD to support **neutral-to-expressive interpolation**, **emotion exaggeration**, and **cross-lingual zero-shot synthesis** using a single fixed emotion space.
+
+
+
+## 2.2 Intensity Control Parameter $\alpha$
+
+While categorical emotion embeddings encode **emotional type**, they do not represent the **degree** to which an emotion is expressed. In natural speech, emotional strength varies continuously depending on context, intent, and prosodic realization. EMOD explicitly models this variation using a **continuous global intensity parameter** $\alpha \in [0, 1]$, which separates **emotional magnitude** from **emotional identity** and enables controlled modulation without altering the semantic direction of the emotion embedding.
+
+The parameter $\alpha$ is derived from **low-level prosodic deviations** relative to speaker-specific neutral baselines, ensuring invariance to individual speaking styles. For each utterance, deviations in **pitch** $(\Delta F_0)$, **energy** $(\Delta E)$, and **duration** $(\Delta D)$ are computed with respect to neutral reference statistics of the same speaker. These deviations are linearly combined using learnable weights and normalized through a sigmoid function to obtain a bounded intensity estimate:
+
+$$
+\alpha = \sigma(\beta_1 \Delta F_0 + \beta_2 \Delta E + \beta_3 \Delta D)
+$$
+
+where $\sigma$ denotes the **sigmoid function** and $\beta_i$ are **trainable coefficients** that adaptively weight the contribution of each prosodic cue.
+
+During inference, $\alpha$ acts as a **global scaling factor** applied directly to the emotion embedding:
+
+$$
+\tilde{z}_{emo} = \alpha \cdot z_{emo}
+$$
+
+This multiplicative interaction enables **smooth interpolation between neutral and expressive speech** while preserving the orientation of the emotion vector in latent space. The formulation remains compatible with **dimension-wise modulation vectors** $r \in \mathbb{R}^{256}$, enabling joint control over **global intensity** and **fine-grained emotional attributes** during synthesis.
+
+## 2.3 EMOD Training Strategy
+
+Training EMOD requires carefully balancing **emotion discriminability**, **speaker invariance**, and **cross-lingual generalization**, while maintaining full compatibility with downstream TTS models. To achieve this, EMOD is trained using a **three-stage pipeline** that progressively structures and stabilizes the emotion embedding space.
+
+In the **first stage**, **multilingual pre-training** is performed using speech data from **Tamil, Malayalam, Hindi, English, Kannada, and Telugu**, supplemented with **Assamese, Marathi, and Punjabi**. This stage encourages the Emotion Encoder to learn **language-agnostic emotional cues** by exposing it to diverse phonetic inventories, intonation patterns, and prosodic realizations while enforcing a **shared unified emotion space** across languages.
+
+The **second stage** focuses on **representation disentanglement**, where **orthogonality constraints** and **adversarial speaker classification** are applied to suppress speaker identity leakage into the emotion embeddings. This stage ensures that $z_{emo}$ encodes **only emotional information**, making the embeddings robust and transferable across **unseen speakers, genders, and languages** without compromising emotional consistency.
+
+In the  EMOD embeddings are aligned with **TTS-specific optimization objectives** to ensure stable and interpretable conditioning during synthesis. While the **Emotion Encoder remains fixed**, downstream TTS components are optimized to correctly interpret and respond to emotional embeddings under varying **intensity levels**. All models are trained for **500,000 steps** using **AdamW** with a learning rate of $3 \times 10^{-4}$, a **batch size of 32**, **gradient accumulation over two steps**, and **mixed-precision training** on **four NVIDIA L4 GPUs** (24 GB VRAM each). The training corpus consists of approximately **10–20 hours of speech per language**, sampled at **16 kHz**.
+
+## 2.3 Loss Functions (EMOD-Specific)
+
+The EMOD framework optimizes a **fixed emotional embedding space** intended for reuse across multiple downstream TTS architectures. The loss design targets four explicit constraints: **(i) categorical emotion separability**, **(ii) speaker invariance**, **(iii) controllable emotional intensity**, and **(iv) acoustic realizability under latent conditioning**. All losses are applied during EMOD training and remain **independent of downstream TTS fine-tuning**.
+
+---
+
+### Mean Squared Error Loss ($L_{MSE}$)
+
+Mean Squared Error loss is computed between **predicted** and **ground-truth mel-spectrograms** produced by the EMOD decoder conditioned on emotion and speaker embeddings. This loss constrains the emotion embedding $z_{emo}$ to encode acoustic variations that are **realizable in the mel-spectral domain**. During training, scaling $z_{emo}$ with the intensity parameter $\alpha$ directly affects **pitch variance**, **energy distribution**, and **temporal dynamics**.  
+$L_{MSE}$ enforces that these variations remain **bounded and spectrally coherent**, preventing unstable latent trajectories that would degrade synthesis quality when EMOD embeddings are injected into **VITS** or **GPT-based** decoders.
+
 <p align="center">
-α = σ(β₁ΔF₀ + β₂ΔE + β₃ΔD)
+  <img src="loss/mse.png" alt="MSE Loss" width="200">
 </p>
-where σ denotes the sigmoid function and βᵢ are trainable coefficients that adaptively weight the relative contribution of each prosodic cue. This formulation allows the model to emphasize the most informative dimensions while maintaining numerical stability and cross-speaker consistency.
 
-During inference, α operates as a global scaling factor applied directly to the emotion embedding:
+---
+
+### Generalized End-to-End Speaker Loss ($L_{GE2E}$)
+
+GE2E loss is applied to **speaker embeddings** extracted from emotionally conditioned speech. The objective minimizes **intra-speaker embedding variance** while maximizing **inter-speaker separation** under emotional modulation. This loss constrains EMOD training such that speaker embeddings remain **invariant to changes introduced by emotion embeddings and intensity scaling**. As a result, emotional conditioning modifies **prosodic structure** without altering **speaker-specific timbre characteristics**, enabling **zero-shot emotion transfer** across unseen speakers.
+
 <p align="center">
-z̃_emo = α · z_emo
+  <img src="loss/ge2e.png" alt="GE2E Loss" width="200">
 </p>
-This multiplicative interaction enables smooth interpolation between neutral and expressive speech while preserving the direction of the emotion vector in latent space. Because α is independent of emotion classification, it can be adjusted dynamically at synthesis time without re-encoding emotional category labels. The formulation remains compatible with dimension-wise modulation vectors r ∈ ℝ²⁵⁶, enabling joint control over global intensity and localized acoustic attributes.
+
+---
+
+### Cross-Entropy Loss for Emotion Classification ($L_{CE}^{emo}$)
+
+Cross-entropy loss is applied to an **auxiliary emotion classifier** attached to the emotion embedding $z_{emo}$. This loss enforces **linear separability of categorical emotions** in the latent space. During training, gradients from $L_{CE}^{emo}$ directly shape the **geometry of the emotion embedding distribution**, ensuring that embeddings corresponding to different emotion labels occupy **non-overlapping regions**. This constraint remains active during **embedding interpolation** and **intensity scaling**, maintaining categorical consistency under continuous control.
+
+<p align="center">
+  <img src="loss/CE.png" alt="Cross-Entropy Loss" width="200">
+</p>
+
+---
+
+### Adversarial Cross-Entropy Loss for Speaker Suppression ($L_{CE}^{spk}$)
+
+An **adversarial speaker classifier** is trained to predict speaker identity from the emotion embedding $z_{emo}$. The classifier minimizes speaker classification loss, while the **Emotion Encoder maximizes this loss via gradient reversal**. This objective removes speaker-dependent information from the emotion embedding space. The resulting embeddings encode **emotional attributes** while remaining **invariant to speaker identity**, enabling reuse across speakers without retraining.
+
+---
+
+### Orthogonality Loss ($L_{orth}$)
+
+Orthogonality loss minimizes the **inner product** between emotion embeddings $z_{emo}$ and speaker embeddings $z_{spk}$. This constraint enforces **decorrelation** between emotion and speaker subspaces prior to fusion. During decoding, the concatenated **512-dimensional latent representation** $[\, z_{emo} ; z_{spk} \,]$ is processed using **cross-attention**. Orthogonality ensures that emotion-related modulation does not project onto speaker-dependent dimensions, preserving disentanglement under latent fusion.
+
+<p align="center">
+  <img src="loss/orth.png" alt="Orthogonality Loss" width="200">
+</p>
+
+---
+
+### Intensity Consistency Loss ($L_{\alpha}$)
+
+Intensity consistency loss constrains the predicted **global intensity parameter** $\alpha$ to match normalized prosodic deviations computed from **pitch** $(\Delta F_0)$, **energy** $(\Delta E)$, and **duration** $(\Delta D)$. The loss minimizes the discrepancy between predicted intensity and target intensity derived from **speaker-normalized prosodic statistics**. This enforces a **monotonic relationship** between $\alpha$ and acoustic expressivity, ensuring **predictable scaling of emotional strength** during inference.
 
 
 ## 3. Integration with End-to-End TTS
@@ -109,42 +206,6 @@ In the **GPT-based TTS pipeline**, input text is tokenized using a **BPE tokeniz
 
 
 In our framework, emotional intensity was trained in an unsupervised manner by modeling deviations in prosodic cues relative to each speaker’s neutral baseline. Specifically, variations in pitch (∆F₀), energy (∆E), and duration (∆D) were extracted for every utterance and normalized to define a continuous intensity scalar α. During training, the Emotion Intensity Predictor learned to map these deviations into latent embeddings, enabling smooth control across weak to strong expressivity levels. At inference, α was directly applied to scale the emotional embedding globally, while a dimension-wise vector r adjusted fine-grained intensity per feature dimension. This design allowed natural tuning of emotional strength without requiring explicit intensity labels, supporting zero-shot transfer and controllable synthesis across multiple languages and speakers.
-
-
-## 5. Emotional Speech Synthesis Model – Loss Functions
-
-The emotional speech synthesis model is optimized using a set of complementary loss functions, each targeting a specific technical requirement of controllable emotional TTS. The combined objective ensures stable acoustic reconstruction, robust speaker preservation, accurate emotion encoding, and effective disentanglement between latent factors.
-
-- **Mean Squared Error (MSE) Loss (L_MSE)**  
-  Used to enforce accurate acoustic reconstruction by minimizing the frame-level error between predicted and ground-truth mel-spectrograms. This loss stabilizes training under emotion-driven prosodic variation and ensures that changes in emotional intensity do not degrade phonetic structure, spectral continuity, or speech intelligibility. It provides a strong low-level constraint that anchors higher-level emotion and speaker objectives to perceptually valid speech outputs.
-
-  <p align="center">
-    <img src="loss/mse.png" alt="MSE Loss" width="200">
-  </p>
-
-- **Generalized End-to-End (GE2E) Loss (L_GE2E)**  
-  Applied to speaker embeddings to preserve speaker identity during emotional modulation. GE2E loss encourages tight clustering of embeddings belonging to the same speaker while maximizing separation across different speakers, thereby preventing speaker drift when emotion embeddings are injected. This is critical in zero-shot emotion transfer, where the emotional signal must modify prosody without contaminating speaker-specific timbre characteristics.
-
-  <p align="center">
-    <img src="loss/ge2e.png" alt="GE2E Loss" width="200">
-  </p>
-
-- **Cross-Entropy (CE) Loss (L_CE)**  
-  Used for both emotion and speaker classification objectives to enforce discriminative latent representations. For emotion classification, CE loss ensures that emotional embeddings are linearly separable across emotion categories. For speaker classification, it is used in an adversarial setting to discourage speaker-identifiable information from leaking into the emotion embedding space, thereby improving robustness and disentanglement.
-
-  <p align="center">
-    <img src="loss/CE.png" alt="Cross-Entropy Loss" width="200">
-  </p>
-
-- **Orthogonality Loss (L_orth)**  
-  Introduced to explicitly decouple emotion and speaker representations by enforcing orthogonality between their embedding subspaces. This loss minimizes correlation between emotion and speaker vectors, ensuring that emotional modulation remains transferable across unseen speakers, languages, and genders. It plays a crucial role in maintaining controllable emotion expression without compromising speaker identity.
-
-  <p align="center">
-    <img src="loss/orth.png" alt="Orthogonality Loss" width="200">
-  </p>
-
-Together, these loss components form a multi-objective optimization framework that enables high-quality emotional speech synthesis with precise control, strong disentanglement, and reliable generalization in low-resource and cross-lingual scenarios.
-
 
 
 ## 6. Clustering for Emotion Cloning and Distance-Based Similarity
