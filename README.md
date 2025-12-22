@@ -12,25 +12,20 @@ The extracted embeddings capture distinct emotions including happiness, sadness,
 ## 1. Table of Contents
 1. [Overview](#overview)
 2. [Introduction](#2-introduction)
-    - [2.1 EMOD-Architecture] 
-    - [2.2 Intensity Control Parameter α](#21-intensity-control-parameter-α)
-    - [2.3 Emotional Speech Synthesis Model – Loss Functions]
-4. [Integration with End-to-End TTS](#3-integration-with-end-to-end-tts)
+    - [2.1 EMOD-Architecture](#21-emod-architecture)
+    - [2.2 Intensity Control Parameter α](#22-intensity-control-parameter-α)
+    - [2.3 Loss Functions (EMOD-Specific)](#23-loss-functions-emod-specific)
+3. [Integration with End-to-End TTS](#3-integration-with-end-to-end-tts)
     - [3.1 VITS Architecture](#31-vits-architecture)
     - [3.2 GPT-Based TTS Architecture](#32-gpt-based-tts-architecture)
-5. [Unsupervised Emotional Intensity Control](#4-unsupervised-emotional-intensity-control)
-6. [Emotional Speech Synthesis Model – Loss Functions](#5-emotional-speech-synthesis-model--loss-functions)
-    - [Mean Squared Error (MSE) Loss](#mean-squared-error-mse-loss-l_mse)
-    - [Generalized End-to-End (GE2E) Loss](#generalized-end-to-end-ge2e-loss-l_ge2e)
-    - [Cross-Entropy (CE) Loss](#cross-entropy-ce-loss-l_ce)
-    - [Orthogonality Loss](#orthogonality-loss-l_orth)
-7. [Clustering for Emotion Cloning and Distance-Based Similarity](#6-clustering-for-emotion-cloning-and-distance-based-similarity)
-8. [Test Setup and Results](#7-test-setup-and-results)
+4. [Unsupervised Emotional Intensity Control](#4-unsupervised-emotional-intensity-control)
+5. [Clustering for Emotion Cloning and Distance-Based Similarity](#6-clustering-for-emotion-cloning-and-distance-based-similarity)
+6. [Test Setup and Results](#7-test-setup-and-results)
     - [7.1 Test Setup](#71-test-setup)
     - [7.2 Results Across Languages](#72-results-across-languages)
     - [7.3 Emotion Transfer and Speaker Cloning Results](#73-emotion-transfer-and-speaker-cloning-results)
-9. [Emotional Embedding Database](#8-emotional-embedding-database)
-10. [Zero-Shot Emotion Transfer and Control Scenarios in TTS](#9-zero-shot-emotion-transfer-and-control-scenarios-in-tts)
+7. [Emotional Embedding Database](#8-emotional-embedding-database)
+8. [Zero-Shot Emotion Transfer and Control Scenarios in TTS](#9-zero-shot-emotion-transfer-and-control-scenarios-in-tts)
 
 
 ## 2. Introduction
