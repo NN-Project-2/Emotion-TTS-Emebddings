@@ -62,7 +62,7 @@ $$
 \tilde{z}_{emo} = \alpha \cdot (z_{emo} \odot r)
 $$
 
-where $r \in \mathbb{R}^{256}$ is a **dimension-wise modulation vector** that enables fine-grained control over specific emotional attributes. The scaled emotion embedding $\tilde{z}_{emo}$ replaces $z_{emo}$ in the fusion process, allowing emotion strength to be adjusted continuously while preserving categorical identity. This design enables EMOD to support **neutral-to-expressive interpolation**, **emotion exaggeration**, and **cross-lingual zero-shot synthesis** using a single fixed emotion space.
+where $r \in \mathbb{R}^{256}$ is a **dimension-wise modulation vector** that enables fine-grained control over specific emotional attributes. The scaled emotion embedding z̃_emo replaces z_emo in the fusion process, allowing emotion strength to be adjusted continuously while preserving categorical identity. This design enables EMOD to support **neutral-to-expressive interpolation**, **emotion exaggeration**, and **cross-lingual zero-shot synthesis** using a single fixed emotion space.
 
 
 
