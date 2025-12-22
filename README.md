@@ -1,9 +1,9 @@
 # EMOD: AN EFFICIENT APPROACH FOR LOW RESOURCE CONTROLLABLE EMOTIONAL SPEECH SYNTHESIS 🎤✨
 
 ## Overview
-EMOD is a framework for enhancing expressive speech synthesis by capturing deep emotional embeddings from multilingual audio data. These embeddings integrate with end-to-end Text-to-Speech (TTS) models such as VITS and GPT-based speech models, enabling natural and controllable synthesis in low-resource language settings.
+EMOD is a standalone emotion embedding extraction framework designed for neural text-to-speech systems. It converts emotional speech signals into fixed-dimensional latent embeddings that represent emotional state independently of speaker identity and linguistic content. The extracted embeddings are compatible with end-to-end TTS architectures and can be injected during inference without retraining the emotion encoder.
 
-The extracted embeddings capture distinct emotions including happiness, sadness, anger, fear, surprise, and disgust, improving naturalness and human-likeness in generated speech. EMOD introduces fine-grained controllability, where deviations in pitch, energy, and duration are normalized into a continuous control factor. This parameter allows dynamic adjustment of emotional intensity, ranging from subtle expressivity to strong exaggeration.
+EMOD supports categorical emotion representation and continuous intensity control through a scalar parameter. It functions as a reusable front-end module for zero-shot emotional conditioning in speech synthesis pipelines.
 
 
 ### 🚀 **DEMO:** [Emotion-TTS Web](https://nn-project-2.github.io/Emotion-TTS-web/)
