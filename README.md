@@ -221,7 +221,7 @@ A multilingual emotional speech database is curated to train the emotion embeddi
 - **Emotion Categories:** Neutral, Angry, Sad, Happy, Fear, Surprise, and Disgust, covering both high-arousal and low-arousal emotional states.  
 - **Audio Format:** 16 kHz single-channel `.wav` files, with 80-band mel-spectrograms extracted for model training and emotion embedding learning.  
 - **Speaker Diversity:** Multiple male and female speakers spanning different age groups and vocal characteristics to prevent speaker bias and overfitting.  
-- **Dataset Size:** Approximately 10–20 hours of annotated speech per language, enabling stable multilingual pretraining.  
+- **Dataset Size:** 10–20 hours of annotated speech per language, enabling stable multilingual pretraining.  
 - **Annotations:** Each utterance is labeled with emotion category, speaker identity, language tag, and normalized emotional intensity where available.
 
 This database composition ensures balanced emotional coverage and sufficient acoustic diversity, forming a reliable foundation for learning disentangled and transferable emotion embeddings.
