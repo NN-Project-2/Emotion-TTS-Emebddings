@@ -196,20 +196,20 @@ In the **GPT-based TTS pipeline**, input text is tokenized using a **BPE tokeniz
 In our framework, emotional intensity was trained in an unsupervised manner by modeling deviations in prosodic cues relative to each speaker’s neutral baseline. Specifically, variations in pitch (∆F₀), energy (∆E), and duration (∆D) were extracted for every utterance and normalized to define a continuous intensity scalar α. During training, the Emotion Intensity Predictor learned to map these deviations into latent embeddings, enabling smooth control across weak to strong expressivity levels. At inference, α was directly applied to scale the emotional embedding globally, while a dimension-wise vector r adjusted fine-grained intensity per feature dimension. This design allowed natural tuning of emotional strength without requiring explicit intensity labels, supporting zero-shot transfer and controllable synthesis across multiple languages and speakers.
 
 
-## 6. Clustering for Emotion Cloning and Distance-Based Similarity
+## 5. Clustering for Emotion Cloning and Distance-Based Similarity
 To achieve high-fidelity emotion cloning, we utilize distance-based clustering to measure the similarity between emotional embeddings. We apply hierarchical clustering and K-means clustering on extracted emotion embeddings to group similar emotional states while preserving speaker identity. The similarity between a neutral speech sample and an emotional target is computed using cosine similarity and Euclidean distance in the embedding space. This ensures that cloned emotional speech retains the target emotion while maintaining the original speaker's characteristics. Additionally, a contrastive loss function is used to enhance intra-class clustering (same emotion) and increase inter-class separation (different emotions), further refining the accuracy of emotion cloning.
 
 <p align="center">
   <img src="Architecture/cluster.png" alt="EMOD Architecture" width=300>
 </p>
 
-## 7. Test Setup and Results
+## 6. Test Setup and Results
 
 This section describes the evaluation protocol used to assess the proposed emotional speech synthesis system, followed by a detailed analysis of quantitative and subjective results across multiple languages and speakers. The evaluation is designed to measure emotion correctness, speaker similarity, and perceptual naturalness under zero-shot and cross-lingual conditions.
 
 ---
 
-### 7.1 Test Setup
+### 6.1 Test Setup
 
 
 The evaluation of the emotional speech synthesis system is designed to rigorously quantify emotion accuracy, speaker preservation, and perceptual naturalness across multiple languages and speakers. The testing protocol combines **objective SER-based classification**, **embedding similarity and clustering**, and **human perceptual ratings** to provide both technical and perceptual evidence of model performance.
@@ -223,7 +223,7 @@ For **speaker preservation and perceptual quality**, **Mean Opinion Score (MOS)*
 
 ---
 
-### 7.2 Results Across Languages
+### 6.2 Results Across Languages
 
 The following table reports performance across four languages, measuring emotion embedding similarity (**Sim.**), SER-based emotion classification accuracy (**Cls. Acc.**), and perceptual naturalness (**MOS**).
 
@@ -238,7 +238,7 @@ These results indicate strong emotion preservation across languages, with high s
 
 ---
 
-### 7.3 Emotion Transfer and Speaker Cloning Results
+### 6.3 Emotion Transfer and Speaker Cloning Results
 
 To evaluate emotion transfer quality under speaker cloning conditions, MOS evaluations are conducted separately for **speaker similarity (Cloning)** and **emotional expressiveness (Emotion)** across different target speakers and emotions.
 
@@ -260,7 +260,7 @@ The results show that the model effectively preserves speaker identity while tra
 These evaluations collectively demonstrate that the proposed framework achieves robust emotional control, reliable emotion transfer, and high perceptual quality across languages and speakers, validating its suitability for zero-shot emotional TTS in low-resource and multilingual scenarios.
 
 
-## 8. Emotional Embedding Database
+## 7. Emotional Embedding Database
 
 A multilingual emotional speech database is curated to train the emotion embedding extractor with sufficient linguistic, emotional, and speaker variability. The objective of this dataset design is to learn language-independent and speaker-invariant emotional representations that generalize effectively in zero-shot and cross-lingual synthesis scenarios, while still supporting fine-grained emotion intensity control.
 
@@ -279,7 +279,7 @@ This database composition ensures balanced emotional coverage and sufficient aco
 Full dataset details are available [here](https://github.com/NN-Project-2/Emotion-TTS-Emebddings/blob/main/README_1.md)
 
 
-## 9. Zero-Shot Emotion Transfer and Control Scenarios in TTS  
+## 8. Zero-Shot Emotion Transfer and Control Scenarios in TTS  
 
 - ✅ Emotion TTS  
 - ✅ Cross-Lingual Transfer  
