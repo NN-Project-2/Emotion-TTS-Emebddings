@@ -100,8 +100,6 @@ In the  EMOD embeddings are aligned with **TTS-specific optimization objectives*
 
 The EMOD framework optimizes a **fixed emotional embedding space** intended for reuse across multiple downstream TTS architectures. The loss design targets four explicit constraints: **(i) categorical emotion separability**, **(ii) speaker invariance**, **(iii) controllable emotional intensity**, and **(iv) acoustic realizability under latent conditioning**. All losses are applied during EMOD training and remain **independent of downstream TTS fine-tuning**.
 
----
-
 ### Mean Squared Error Loss ($L_{MSE}$)
 
 Mean Squared Error loss is computed between **predicted** and **ground-truth mel-spectrograms** produced by the EMOD decoder conditioned on emotion and speaker embeddings. This loss constrains the emotion embedding $z_{emo}$ to encode acoustic variations that are **realizable in the mel-spectral domain**. During training, scaling $z_{emo}$ with the intensity parameter $\alpha$ directly affects **pitch variance**, **energy distribution**, and **temporal dynamics**.  
@@ -111,7 +109,6 @@ $L_{MSE}$ enforces that these variations remain **bounded and spectrally coheren
   <img src="loss/mse.png" alt="MSE Loss" width="200">
 </p>
 
----
 
 ### Generalized End-to-End Speaker Loss ($L_{GE2E}$)
 
@@ -121,7 +118,6 @@ GE2E loss is applied to **speaker embeddings** extracted from emotionally condit
   <img src="loss/ge2e.png" alt="GE2E Loss" width="200">
 </p>
 
----
 
 ### Cross-Entropy Loss for Emotion Classification ($L_{CE}^{emo}$)
 
@@ -131,13 +127,11 @@ Cross-entropy loss is applied to an **auxiliary emotion classifier** attached to
   <img src="loss/CE.png" alt="Cross-Entropy Loss" width="200">
 </p>
 
----
 
 ### Adversarial Cross-Entropy Loss for Speaker Suppression ($L_{CE}^{spk}$)
 
 An **adversarial speaker classifier** is trained to predict speaker identity from the emotion embedding $z_{emo}$. The classifier minimizes speaker classification loss, while the **Emotion Encoder maximizes this loss via gradient reversal**. This objective removes speaker-dependent information from the emotion embedding space. The resulting embeddings encode **emotional attributes** while remaining **invariant to speaker identity**, enabling reuse across speakers without retraining.
 
----
 
 ### Orthogonality Loss ($L_{orth}$)
 
@@ -147,7 +141,6 @@ Orthogonality loss minimizes the **inner product** between emotion embeddings $z
   <img src="loss/orth.png" alt="Orthogonality Loss" width="200">
 </p>
 
----
 
 ### Intensity Consistency Loss ($L_{\alpha}$)
 
