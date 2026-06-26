@@ -5,7 +5,6 @@ EMOD is a standalone emotion embedding extraction framework designed for neural 
 
 EMOD supports categorical emotion representation and continuous intensity control through a scalar parameter. It functions as a reusable front-end module for zero-shot emotional conditioning in speech synthesis pipelines.
 
-
 ### 🚀 **DEMO:** [Emotion-TTS Web](https://nn-project-2.github.io/Emotion-TTS-web/)
 ### 🎵 **Embeddings:** [Download Emotion embeddings.tar.xz](https://github.com/NN-Project-2/Emotion-TTS-Emebddings/blob/main/Emotion%20embeddings.tar.xz)
 
